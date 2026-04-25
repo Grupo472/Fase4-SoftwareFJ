@@ -13,8 +13,8 @@
 | Nombre | GitHub | Ramas | Issues |
 |---|---|---|---|
 | Edisson Ferney Parrado Reyes | [@EdissonParrado](https://github.com/EdissonParrado) | `imports` `logs` `excepciones` `sistema` | #1 #2 #3 #9 |
-| Alexandra Tautiva Betancur | [@ALXBETANCUR](https://github.com/ALXBETANCUR) | `entidadbase` `cliente` | #4 #5 |
-| Daniel Eduardo Caro Rodriguez | [@carorodriguezdanieleduardo-dot](https://github.com/carorodriguezdanieleduardo-dot)| `servicio-sala` `equipo-asesoria` | #6 #7 |
+| Alexandra Tautiva Betancur | [@ALXBETANCUR](https://github.com/ALXBETANCUR) | `entidadbase` `servicio-sala` | #4 #6 |
+| Daniel Eduardo Caro Rodriguez | [@carorodriguezdanieleduardo-dot](https://github.com/carorodriguezdanieleduardo-dot)| `cliente` `equipo-asesoria` | #5 #7 |
 | por definir | @usuario | `reserva` | #8 |
 
 ---
