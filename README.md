@@ -67,8 +67,6 @@ git push origin nombre-de-tu-rama
 
 ## 📋 Convención de commits
 
-Formato: `tipo(alcance): descripción en español`
-
 | Tipo | Cuándo usarlo |
 |---|---|
 | `feat` | Agregas una clase, método o funcionalidad nueva |
