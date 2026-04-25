@@ -1,22 +1,44 @@
-# Fase4-SoftwareFJ
-Sistema Integral de Gestión de Clientes, Servicios y Reservas para Software FJ. Desarrollado en Python con POO, clases abstractas, manejo de excepciones y registro de logs. Curso Programación 213023 - UNAD - Grupo 472.
+# 🗂️ Fase4 — Sistema de Gestión Software FJ
 
-## Integrantes del equipo
+> Sistema Integral de Gestión de Clientes, Servicios y Reservas desarrollado en Python con arquitectura 100% orientada a objetos, manejo robusto de excepciones y registro de logs.
 
-| Nombre | Usuario GitHub | Rama | Issues |
+**Curso:** Programación 213023 — UNAD  
+**Grupo:** 472  
+**Tutor:** Wilson Hernán Pérez Correa
+
+---
+
+## 👥 Equipo de trabajo
+
+| Nombre | GitHub | Ramas | Issues |
 |---|---|---|---|
-| Edisson Ferney Parrado Reyes | EdissonParrado | `base` / `sistema` | #1 #2 #3 #9 |
-| Alexandra Tautiva Betancur | (usuario GitHub) | `entidades` | #4 #5 |
-| Daniel Eduardo Caro Rodriguez | (usuario GitHub) | `servicios` | #6 #7 |
-| Hugo Enrique Florez Granados | (usuario GitHub) | `reserva` | #8 |
+| Edisson Ferney Parrado Reyes | [@EdissonParrado](https://github.com/EdissonParrado) | `imports` `logs` `excepciones` `sistema` | #1 #2 #3 #9 |
+| Alexandra Tautiva Betancur | [@ALXBETANCUR](https://github.com/ALXBETANCUR) | `entidadbase` `cliente` | #4 #5 |
+| Daniel Eduardo Caro Rodriguez | [@carorodriguezdanieleduardo-dot](https://github.com/carorodriguezdanieleduardo-dot)| `servicio-sala` `equipo-asesoria` | #6 #7 |
+| por definir | @usuario | `reserva` | #8 |
 
-## Estructura del proyecto
+---
+
+## 📁 Estructura del proyecto
 Fase4-SoftwareFJ/
 ├── Sistema_Gestion.py   ← archivo principal del sistema
 ├── logs/                ← se crea automáticamente al ejecutar
 └── README.md
+---
 
-## Cómo trabajar en el proyecto
+## ⚙️ Cómo ejecutar el sistema
+
+```bash
+git clone https://github.com/Grupo472/Fase4-SoftwareFJ.git
+cd Fase4-SoftwareFJ
+python Sistema_Gestion.py
+```
+
+> Al ejecutarlo se crea automáticamente la carpeta `logs/` con el archivo `sistema.log`.
+
+---
+
+## 🔀 Flujo de trabajo
 
 ### 1. Clonar el repositorio (solo la primera vez)
 ```bash
@@ -32,18 +54,25 @@ git checkout -b nombre-de-tu-rama
 ### 3. Hacer commits mientras trabajas
 ```bash
 git add Sistema_Gestion.py
-git commit -m "Descripción clara de lo que hiciste"
+git commit -m "feat(alcance): descripción de lo que hiciste"
 git push origin nombre-de-tu-rama
 ```
 
 ### 4. Cuando termines tu Issue — abrir Pull Request
-- Ve a GitHub → Pull requests → New pull request
-- Base: `main` ← Compare: `tu-rama`
-- Espera revisión del líder antes de fusionar
+- Ve a **GitHub → Pull requests → New pull request**
+- Selecciona: `base: main` ← `compare: tu-rama`
+- Espera revisión y aprobación del líder antes de fusionar
 
-## Reglas del equipo
-- ❌ Nunca hacer commits directamente al `main`
-- ✅ Un commit por cada parte lógica completada
-- ✅ Mensajes de commit descriptivos en español
-- ✅ Esperar aprobación del líder para fusionar al main
-- ✅ Los Issues se cierran cuando el PR es aprobado
+---
+
+## 📋 Convención de commits
+
+Formato: `tipo(alcance): descripción en español`
+
+| Tipo | Cuándo usarlo |
+|---|---|
+| `feat` | Agregas una clase, método o funcionalidad nueva |
+| `fix` | Corriges un error en el código |
+| `docs` | Cambias comentarios o documentación |
+| `refactor` | Reorganizas código sin cambiar su funcionamiento |
+| `test` | Agregas pruebas o la simulación final |
