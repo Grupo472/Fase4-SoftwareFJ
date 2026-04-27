@@ -27,6 +27,26 @@ def registrar_log(tipo: str, mensaje: str) -> None:
         print(f"  [ADVERTENCIA] No se pudo escribir en logs: {e}")
 
 
+
+class EntidadSistema(ABC):
+    """
+    Clase abstracta base para todas las entidades del sistema.
+    Define la interfaz común: describir y validar.
+    """
+
+    @abstractmethod
+    def describir(self) -> str:
+        """Retorna una descripción textual de la entidad."""
+        pass
+
+    @abstractmethod
+    def validar(self) -> bool:
+        """Valida que la entidad esté en un estado correcto."""
+        pass
+
+
+
+
 class Cliente:  # Definición de la clase Cliente
 
     def __init__(self, nombre, edad, correo):  # Constructor que inicializa los atributos del cliente
@@ -88,19 +108,3 @@ if __name__ == "__main__":  # Punto de entrada del programa
         print("Se capturó un error:", e) 
 
 
-
-class EntidadSistema(ABC):
-    """
-    Clase abstracta base para todas las entidades del sistema.
-    Define la interfaz común: describir y validar.
-    """
-
-    @abstractmethod
-    def describir(self) -> str:
-        """Retorna una descripción textual de la entidad."""
-        pass
-
-    @abstractmethod
-    def validar(self) -> bool:
-        """Valida que la entidad esté en un estado correcto."""
-        pass
