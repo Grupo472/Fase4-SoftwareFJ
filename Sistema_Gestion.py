@@ -5,7 +5,6 @@
 # Edisson Ferney Parrado Reyes
 # Alexandra Tautiva Betancur
 # Daniel Eduardo Caro Rodriguez
-# Hugo Enrique Florez Granados
 #==============================================================================
 # Se importan las librerías necesarias para el funcionamiento del sistema, incluyendo re para expresiones regulares, 
 # uuid para generación de identificadores únicos, logging para registro de eventos, 
