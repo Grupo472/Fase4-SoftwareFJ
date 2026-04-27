@@ -7,6 +7,19 @@
 # Daniel Eduardo Caro Rodriguez
 # Hugo Enrique Florez Granados
 #=======================================
+# CONFIGURACIÓN DEL LOGGER
+# Registra errores y eventos en un archivo .log
+
+
+os.makedirs("logs", exist_ok=True)
+
+logging.basicConfig(
+    filename="logs/sistema.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    encoding="utf-8"
+)
+logger = logging.getLogger(__name__)
 class Cliente:  # Definición de la clase Cliente
 
     def __init__(self, nombre, edad, correo):  # Constructor que inicializa los atributos del cliente
