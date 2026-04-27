@@ -5,7 +5,6 @@
 # Edisson Ferney Parrado Reyes
 # Alexandra Tautiva Betancur
 # Daniel Eduardo Caro Rodriguez
-# Hugo Enrique Florez Granados
 #=======================================
 class Cliente:  # Definición de la clase Cliente
 
