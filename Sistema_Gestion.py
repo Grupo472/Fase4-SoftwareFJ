@@ -17,14 +17,14 @@ from datetime import datetime #  datetime para manejo de fechas y horas.
 #===============================================================================
 # CONFIGURACIÓN DEL LOGGER
 # Registra errores y eventos en un archivo .log
-os.makedirs("logs", exist_ok=True)
-logging.basicConfig(
-    filename="logs/sistema.log",
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    encoding="utf-8"
+os.makedirs("logs", exist_ok=True) # Crea el directorio logs si no existe
+logging.basicConfig( # Configuración del logger para registrar eventos en un archivo de logs
+    filename="logs/sistema.log", # Archivo donde se guardarán los logs
+    level=logging.INFO, # Nivel de log para registrar solo eventos de información y errores
+    format="%(asctime)s - %(levelname)s - %(message)s", # Formato del mensaje de log que incluye la fecha, el nivel de log y el mensaje
+    encoding="utf-8" # Codificación del archivo de log para soportar caracteres especiales
 )
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__) # Obtiene un logger específico para este módulo, lo que permite registrar eventos relacionados con el sistema de gestión de clientes, servicios y reservas.
 #===============================================================================
 
 class Cliente:  # Definición de la clase Cliente
