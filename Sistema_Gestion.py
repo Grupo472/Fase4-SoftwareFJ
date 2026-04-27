@@ -26,7 +26,28 @@ logging.basicConfig( # Configuración del logger para registrar eventos en un ar
 )
 logger = logging.getLogger(__name__) # Obtiene un logger específico para este módulo, lo que permite registrar eventos relacionados con el sistema de gestión de clientes, servicios y reservas.
 #===============================================================================
+# EXCEPCIONES PERSONALIZADAS
+# ================================================================================
+class ErrorSistema(Exception):
+    # Excepción base del sistema
+    def __init__(self, mensaje):
+        super().__init__(mensaje)
+        logger.error(f"[ERROR] {mensaje}")
 
+class ClienteError(ErrorSistema):
+    # Error en datos del cliente
+    def __init__(self, mensaje):
+        super().__init__(f"ClienteError: {mensaje}")
+
+class ServicioError(ErrorSistema):
+    # Error en un servicio
+    def __init__(self, mensaje):
+        super().__init__(f"ServicioError: {mensaje}")
+
+class ReservaError(ErrorSistema):
+    # Error en una reserva
+    def __init__(self, mensaje):
+        super().__init__(f"ReservaError: {mensaje}")
 class Cliente:  # Definición de la clase Cliente
 
     def __init__(self, nombre, edad, correo):  # Constructor que inicializa los atributos del cliente
