@@ -5,6 +5,7 @@
 # Edisson Ferney Parrado Reyes
 # Alexandra Tautiva Betancur
 # Daniel Eduardo Caro Rodriguez
+# Hugo Enrique Florez Granados
 #==============================================================================
 # Se importan las librerías necesarias para el funcionamiento del sistema, incluyendo
 
@@ -48,6 +49,25 @@ class ReservaError(ErrorSistema):
     # Error en una reserva
     def __init__(self, mensaje):
         super().__init__(f"ReservaError: {mensaje}")
+#==============================================================================
+# DEFINICION ENTIDAD BASE
+#==============================================================================
+class EntidadSistema(ABC):
+    """
+    Clase abstracta base para todas las entidades del sistema.
+    Define la interfaz común: describir y validar.
+    """
+
+    @abstractmethod
+    def describir(self) -> str:
+        """Retorna una descripción textual de la entidad."""
+        pass
+
+    @abstractmethod
+    def validar(self) -> bool:
+        """Valida que la entidad esté en un estado correcto."""
+        pass
+#==============================================================================
 class Cliente:  # Definición de la clase Cliente
 
     def __init__(self, nombre, edad, correo):  # Constructor que inicializa los atributos del cliente
@@ -107,3 +127,5 @@ if __name__ == "__main__":  # Punto de entrada del programa
 
     except Exception as e:
         print("Se capturó un error:", e) 
+
+
