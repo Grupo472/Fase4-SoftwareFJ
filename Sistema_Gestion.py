@@ -6,28 +6,52 @@
 # Alexandra Tautiva Betancur
 # Daniel Eduardo Caro Rodriguez
 # Hugo Enrique Florez Granados
-#=======================================
+#==============================================================================
+# Se importan las librerías necesarias para el funcionamiento del sistema, incluyendo
 
-import datetime
-from abc import ABC, abstractmethod
+import re #re para expresiones regulares, utilizado para validar formatos de correo electrónico y otros datos de entrada.
+import uuid # uuid para generación de identificadores únicos.
+import logging # logging para registro de eventos.
+import os #os para operaciones del sistema operativo.
+from abc import ABC, abstractmethod # abc para clases abstractas
+from datetime import datetime #  datetime para manejo de fechas y horas.
+#===============================================================================
+# CONFIGURACIÓN DEL LOGGER
+# Registra errores y eventos en un archivo .log
+os.makedirs("logs", exist_ok=True) # Crea el directorio logs si no existe
+logging.basicConfig( # Configuración del logger para registrar eventos en un archivo de logs
+    filename="logs/sistema.log", # Archivo donde se guardarán los logs
+    level=logging.INFO, # Nivel de log para registrar solo eventos de información y errores
+    format="%(asctime)s - %(levelname)s - %(message)s", # Formato del mensaje de log que incluye la fecha, el nivel de log y el mensaje
+    encoding="utf-8" # Codificación del archivo de log para soportar caracteres especiales
+)
+logger = logging.getLogger(__name__) # Obtiene un logger específico para este módulo, lo que permite registrar eventos relacionados con el sistema de gestión de clientes, servicios y reservas.
+#===============================================================================
+# EXCEPCIONES PERSONALIZADAS
+# ================================================================================
+class ErrorSistema(Exception):
+    # Excepción base del sistema
+    def __init__(self, mensaje):
+        super().__init__(mensaje)
+        logger.error(f"[ERROR] {mensaje}")
 
-# ─────────────────────────────────────────────
-#  UTILIDAD: Registro de logs
-# ─────────────────────────────────────────────
-LOG_FILE = "logs.txt"
+class ClienteError(ErrorSistema):
+    # Error en datos del cliente
+    def __init__(self, mensaje):
+        super().__init__(f"ClienteError: {mensaje}")
 
-def registrar_log(tipo: str, mensaje: str) -> None:
-    """Registra un evento o error en el archivo de logs."""
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    linea = f"[{timestamp}] [{tipo.upper()}] {mensaje}\n"
-    try:
-        with open(LOG_FILE, "a", encoding="utf-8") as archivo:
-            archivo.write(linea)
-    except OSError as e:
-        print(f"  [ADVERTENCIA] No se pudo escribir en logs: {e}")
+class ServicioError(ErrorSistema):
+    # Error en un servicio
+    def __init__(self, mensaje):
+        super().__init__(f"ServicioError: {mensaje}")
 
-
-
+class ReservaError(ErrorSistema):
+    # Error en una reserva
+    def __init__(self, mensaje):
+        super().__init__(f"ReservaError: {mensaje}")
+#==============================================================================
+# DEFINICION ENTIDAD BASE
+#==============================================================================
 class EntidadSistema(ABC):
     """
     Clase abstracta base para todas las entidades del sistema.
@@ -43,10 +67,7 @@ class EntidadSistema(ABC):
     def validar(self) -> bool:
         """Valida que la entidad esté en un estado correcto."""
         pass
-
-
-
-
+#==============================================================================
 class Cliente:  # Definición de la clase Cliente
 
     def __init__(self, nombre, edad, correo):  # Constructor que inicializa los atributos del cliente
