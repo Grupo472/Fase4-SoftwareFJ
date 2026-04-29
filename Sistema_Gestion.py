@@ -7,17 +7,21 @@
 # Daniel Eduardo Caro Rodriguez
 # Hugo Enrique Florez Granados
 #==============================================================================
-# Se importan las librerías necesarias para el funcionamiento del sistema, incluyendo
 
+# Se importan las librerías necesarias para el funcionamiento del sistema, incluyendo
 import re #re para expresiones regulares, utilizado para validar formatos de correo electrónico y otros datos de entrada.
 import uuid # uuid para generación de identificadores únicos.
 import logging # logging para registro de eventos.
 import os #os para operaciones del sistema operativo.
 from abc import ABC, abstractmethod # abc para clases abstractas
 from datetime import datetime #  datetime para manejo de fechas y horas.
+
+
 #===============================================================================
 # CONFIGURACIÓN DEL LOGGER
 # Registra errores y eventos en un archivo .log
+#===============================================================================
+
 os.makedirs("logs", exist_ok=True) # Crea el directorio logs si no existe
 logging.basicConfig( # Configuración del logger para registrar eventos en un archivo de logs
     filename="logs/sistema.log", # Archivo donde se guardarán los logs
@@ -26,29 +30,28 @@ logging.basicConfig( # Configuración del logger para registrar eventos en un ar
     encoding="utf-8" # Codificación del archivo de log para soportar caracteres especiales
 )
 logger = logging.getLogger(__name__) # Obtiene un logger específico para este módulo, lo que permite registrar eventos relacionados con el sistema de gestión de clientes, servicios y reservas.
+
 #===============================================================================
 # EXCEPCIONES PERSONALIZADAS
 # ================================================================================
-class ErrorSistema(Exception):
-    # Excepción base del sistema
-    def __init__(self, mensaje):
-        super().__init__(mensaje)
-        logger.error(f"[ERROR] {mensaje}")
+class ErrorSistema(Exception): # Define una clase de excepción personalizada para el sistema, que hereda de la clase base Exception.
+    def __init__(self, mensaje): # Constructor que recibe un mensaje de error y lo pasa a la clase base Exception, además de registrar el error en el logger.
+        super().__init__(mensaje) # Llama al constructor de la clase base Exception para inicializar la excepción con el mensaje proporcionado.
+        logger.error(f"[ERROR] {mensaje}") # Registra el mensaje de error en el logger con un nivel de error, lo que permite mantener un registro de los errores que ocurren en el sistema.
 
-class ClienteError(ErrorSistema):
-    # Error en datos del cliente
-    def __init__(self, mensaje):
-        super().__init__(f"ClienteError: {mensaje}")
+class ClienteError(ErrorSistema): # Define una clase de excepción personalizada para errores relacionados con los clientes, que hereda de ErrorSistema.
+    def __init__(self, mensaje): # Constructor que recibe un mensaje de error específico para clientes y lo formatea antes de pasarlo al constructor de ErrorSistema.
+        super().__init__(f"ClienteError: {mensaje}") # Llama al constructor de ErrorSistema con un mensaje formateado que indica que se trata de un error relacionado con los clientes, lo que ayuda a identificar el origen del error en los logs.
 
-class ServicioError(ErrorSistema):
-    # Error en un servicio
-    def __init__(self, mensaje):
-        super().__init__(f"ServicioError: {mensaje}")
+class ServicioError(ErrorSistema): # Define una clase de excepción personalizada para errores relacionados con los servicios, que hereda de ErrorSistema.
+    def __init__(self, mensaje): # Constructor que recibe un mensaje de error específico para servicios y lo formatea antes de pasarlo al constructor de ErrorSistema.
+        super().__init__(f"ServicioError: {mensaje}") # Llama al constructor de ErrorSistema con un mensaje formateado que indica que se trata de un error relacionado con los servicios, lo que ayuda a identificar el origen del error en los logs.
 
-class ReservaError(ErrorSistema):
-    # Error en una reserva
-    def __init__(self, mensaje):
-        super().__init__(f"ReservaError: {mensaje}")
+class ReservaError(ErrorSistema): # Define una clase de excepción personalizada para errores relacionados con las reservas, que hereda de ErrorSistema.
+    
+    
+    def __init__(self, mensaje): # Constructor que recibe un mensaje de error específico para reservas y lo formatea antes de pasarlo al constructor de ErrorSistema.
+        super().__init__(f"ReservaError: {mensaje}") # Llama al constructor de ErrorSistema con un mensaje formateado que indica que se trata de un error relacionado con las reservas, lo que ayuda a identificar el origen del error en los logs.
 #==============================================================================
 # DEFINICION ENTIDAD BASE
 #==============================================================================
@@ -67,10 +70,10 @@ class EntidadSistema(ABC):
     def validar(self) -> bool:
         """Valida que la entidad esté en un estado correcto."""
         pass
+
 #==============================================================================
 # CLASE CLIENTE  # Tu rama integracion corregida
-#=======================================
-
+#==============================================================================
 class Cliente:  # Define la clase Cliente
 
     def __init__(self, nombre, edad, correo):  # Constructor
@@ -105,26 +108,10 @@ class Cliente:  # Define la clase Cliente
     def mostrar_info(self):  # Método para mostrar datos
         return f"Cliente: {self.__nombre}, Edad: {self.__edad}, Correo: {self.__correo}"  # Retorna string
 
-#=======================================  # Separador
-# PRUEBA DEL SISTEMA  # Simulación básica
-#=======================================
 
-if __name__ == "__main__":  # Verifica que se ejecute directamente
-
-    print("=== PRUEBA CLIENTE ===")  # Mensaje en consola
-
-    try:  # Bloque de prueba
-        cliente1 = Cliente("Juan", 25, "juan@email.com")  # Crea cliente válido
-        print(cliente1.mostrar_info())  # Muestra datos
-
-        cliente2 = Cliente("", -5, "correo_invalido")  # Intenta crear cliente inválido
-
-    except ClienteError as e:  # Captura error personalizado
-        print("Error:", e)  # Muestra error en consola
-        logger.error(e)  # Registra el error en el archivo log
-
+#==============================================================================
 #  SERVICIOS ESPECIALIZADOS
-
+#==============================================================================
 class ReservaSala(Servicio):
     """
     Servicio de reserva de salas de reuniones.
@@ -159,8 +146,6 @@ class ReservaSala(Servicio):
     def describir(self) -> str:
         return (f"Sala '{self._nombre}' | Capacidad: {self.__capacidad} personas "
                 f"| Precio: ${self._precio_hora}/h")
-
-
 class AlquilerEquipo(Servicio):
     """
     Servicio de alquiler de equipos tecnológicos.
