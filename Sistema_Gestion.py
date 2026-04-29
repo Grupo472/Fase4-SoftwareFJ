@@ -64,5 +64,41 @@ if __name__ == "__main__":  # Punto de entrada del programa
 
         cliente2 = Cliente("", -5, "correo_invalido")  # Genera error
 
-    except Exception as e:
-        print("Se capturó un error:", e) 
+    
+class AlquilerEquipo(Servicio):
+    """
+    Servicio de alquiler de equipos tecnológicos.
+    Incluye tipo de equipo y un depósito de garantía.
+    """
+
+    def __init__(self, nombre: str, precio_hora: float,
+                 tipo_equipo: str, deposito: float = 0.0,
+                 disponible: bool = True) -> None:
+        super().__init__(nombre, precio_hora, disponible)
+        if not tipo_equipo or not isinstance(tipo_equipo, str):
+            raise ErrorServicio("El tipo de equipo no puede estar vacío.")
+        if deposito < 0:
+            raise ErrorServicio("El depósito no puede ser negativo.")
+        self.__tipo_equipo = tipo_equipo
+        self.__deposito = deposito
+        registrar_log("INFO", f"Servicio AlquilerEquipo creado: {nombre}")
+
+    def get_deposito(self) -> float:
+        return self.__deposito
+
+    def calcular_costo(self, horas: float, descuento: float = 0.0,
+                       aplicar_iva: bool = False) -> float:
+        """Costo = (precio_hora × horas + depósito) con descuento e IVA opcionales."""
+        if horas <= 0:
+            raise ErrorDuracion("Las horas deben ser un valor positivo.")
+        if not (0 <= descuento <= 100):
+            raise ErrorServicio("El descuento debe estar entre 0 y 100.")
+        subtotal = self._precio_hora * horas + self.__deposito
+        subtotal -= subtotal * (descuento / 100)
+        if aplicar_iva:
+            subtotal *= 1.19
+        return round(subtotal, 2)
+
+    def describir(self) -> str:
+        return (f"Equipo '{self._nombre}' ({self.__tipo_equipo}) "
+                f"| Precio: ${self._precio_hora}/h | Depósito: ${self.__deposito}")
