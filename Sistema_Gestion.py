@@ -48,10 +48,10 @@ class ServicioError(ErrorSistema): # Define una clase de excepción personalizad
         super().__init__(f"ServicioError: {mensaje}") # Llama al constructor de ErrorSistema con un mensaje formateado que indica que se trata de un error relacionado con los servicios, lo que ayuda a identificar el origen del error en los logs.
 
 class ReservaError(ErrorSistema): # Define una clase de excepción personalizada para errores relacionados con las reservas, que hereda de ErrorSistema.
-    
-    
     def __init__(self, mensaje): # Constructor que recibe un mensaje de error específico para reservas y lo formatea antes de pasarlo al constructor de ErrorSistema.
         super().__init__(f"ReservaError: {mensaje}") # Llama al constructor de ErrorSistema con un mensaje formateado que indica que se trata de un error relacionado con las reservas, lo que ayuda a identificar el origen del error en los logs.
+
+
 #==============================================================================
 # DEFINICION ENTIDAD BASE
 #==============================================================================
@@ -72,7 +72,7 @@ class EntidadSistema(ABC):
         pass
 
 #==============================================================================
-# CLASE CLIENTE  # Tu rama integracion corregida
+# CLASE CLIENTE 
 #==============================================================================
 class Cliente:  # Define la clase Cliente
 
@@ -107,6 +107,10 @@ class Cliente:  # Define la clase Cliente
 
     def mostrar_info(self):  # Método para mostrar datos
         return f"Cliente: {self.__nombre}, Edad: {self.__edad}, Correo: {self.__correo}"  # Retorna string
+
+#==============================================================================
+# CLASE SERVICIO
+#==============================================================================
 
 
 #==============================================================================
