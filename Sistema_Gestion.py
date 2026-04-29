@@ -5,6 +5,7 @@
 # Edisson Ferney Parrado Reyes
 # Alexandra Tautiva Betancur
 # Daniel Eduardo Caro Rodriguez
+# Hugo Enrique Florez Granados
 #==============================================================================
 # Se importan las librerías necesarias para el funcionamiento del sistema, incluyendo
 
@@ -48,6 +49,25 @@ class ReservaError(ErrorSistema):
     # Error en una reserva
     def __init__(self, mensaje):
         super().__init__(f"ReservaError: {mensaje}")
+#==============================================================================
+# DEFINICION ENTIDAD BASE
+#==============================================================================
+class EntidadSistema(ABC):
+    """
+    Clase abstracta base para todas las entidades del sistema.
+    Define la interfaz común: describir y validar.
+    """
+
+    @abstractmethod
+    def describir(self) -> str:
+        """Retorna una descripción textual de la entidad."""
+        pass
+
+    @abstractmethod
+    def validar(self) -> bool:
+        """Valida que la entidad esté en un estado correcto."""
+        pass
+#==============================================================================
 class Cliente:  # Definición de la clase Cliente
 
     def __init__(self, nombre, edad, correo):  # Constructor que inicializa los atributos del cliente
@@ -107,60 +127,6 @@ if __name__ == "__main__":  # Punto de entrada del programa
 
     except Exception as e:
         print("Se capturó un error:", e) 
-
-
-
-
-
-#  CLASE ABSTRACTA: Servicio
-# ─────────────────────────────────────────────
-class Servicio(EntidadSistema, ABC):
-    """
-    Clase abstracta que representa un servicio ofrecido por Software FJ.
-    Las subclases deben implementar calcular_costo y describir.
-    """
-
-    def __init__(self, nombre: str, precio_hora: float, disponible: bool = True) -> None:
-        if not nombre or not isinstance(nombre, str):
-            raise ErrorServicio("El nombre del servicio no puede estar vacío.")
-        if not isinstance(precio_hora, (int, float)) or precio_hora < 0:
-            raise ErrorServicio("El precio por hora debe ser un número no negativo.")
-        self._nombre = nombre
-        self._precio_hora = float(precio_hora)
-        self._disponible = disponible
-
-    def get_nombre(self) -> str:
-        return self._nombre
-
-    def get_precio_hora(self) -> float:
-        return self._precio_hora
-
-    def esta_disponible(self) -> bool:
-        return self._disponible
-
-    def set_disponible(self, estado: bool) -> None:
-        self._disponible = estado
-
-    @abstractmethod
-    def calcular_costo(self, horas: float, descuento: float = 0.0,
-                       aplicar_iva: bool = False) -> float:
-        """
-        Calcula el costo del servicio.
-        Método sobrecargado mediante parámetros opcionales:
-          - horas: duración en horas (requerido)
-          - descuento: porcentaje de descuento 0-100 (opcional, defecto 0)
-          - aplicar_iva: si se aplica IVA del 19% (opcional, defecto False)
-        """
-        pass
-
-    def validar(self) -> bool:
-        return self._precio_hora >= 0 and bool(self._nombre)
-
-    def __str__(self) -> str:
-        estado = "Disponible" if self._disponible else "No disponible"
-        return f"[{self.__class__.__name__}] {self._nombre} | ${self._precio_hora}/h | {estado}"
-
-
 
 #  SERVICIOS ESPECIALIZADOS
 
@@ -237,4 +203,3 @@ class AlquilerEquipo(Servicio):
     def describir(self) -> str:
         return (f"Equipo '{self._nombre}' ({self.__tipo_equipo}) "
                 f"| Precio: ${self._precio_hora}/h | Depósito: ${self.__deposito}")
-
