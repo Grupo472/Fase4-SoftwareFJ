@@ -111,7 +111,42 @@ class Cliente:  # Define la clase Cliente
 #==============================================================================
 # CLASE SERVICIO
 #==============================================================================
-
+lass Servicio(EntidadBase, ABC):
+    """Clase abstracta base para los servicios de Software FJ."""
+ 
+    def __init__(self, id, nombre, precio_base): # id es para EntidadBase
+        super().__init__(id)
+        if not nombre or not nombre.strip():
+            raise ServicioError('El nombre no puede estar vacío')
+        if precio_base <= 0:
+            raise ServicioError('El precio debe ser mayor a cero')
+        self._nombre      = nombre.strip()
+        self._precio_base = precio_base
+        self._disponible  = True
+ 
+    def get_nombre(self):       return self._nombre
+    def get_precio(self):       return self._precio_base
+    def esta_disponible(self):  return self._disponible
+    def set_disponible(self, estado): self._disponible = estado
+ 
+    # ── Métodos abstractos (polimorfismo) ──────────────
+    @abstractmethod
+    def validar_parametros(self, horas, descuento): pass
+ 
+    @abstractmethod
+    def calcular_costo(self, horas=1, con_iva=False, descuento=0): pass
+ 
+    @abstractmethod
+    def describir(self): pass
+ 
+    # ── Método auxiliar compartido ─────────────────────
+    def aplicar_descuento_iva(self, subtotal, con_iva, descuento):
+        if descuento < 0 or descuento > 100:
+            raise ServicioError(f'Descuento {descuento}% fuera de rango')
+        total = subtotal * (1 - descuento / 100)
+        if con_iva:
+            total *= 1.19
+        return round(total, 2)
 
 #==============================================================================
 #  SERVICIOS ESPECIALIZADOS
