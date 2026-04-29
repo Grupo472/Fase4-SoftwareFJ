@@ -18,7 +18,8 @@ from datetime import datetime #  datetime para manejo de fechas y horas.
 #===============================================================================
 # CONFIGURACIÓN DEL LOGGER
 # Registra errores y eventos en un archivo .log
-#==|=============================================================================
+# Comentario de prueba.
+#===============================================================================
 os.makedirs("logs", exist_ok=True) # Crea el directorio logs si no existe
 logging.basicConfig( # Configuración del logger para registrar eventos en un archivo de logs
     filename="logs/sistema.log", # Archivo donde se guardarán los logs
