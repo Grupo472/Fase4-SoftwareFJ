@@ -60,10 +60,15 @@ class EntidadSistema(ABC):
     Clase abstracta base para todas las entidades del sistema.
     Define la interfaz común: describir y validar.
     """
-
-    def __init__(self, id: int, fecha_creacion: str):
-        self.id = id
-        self.fecha_creacion = fecha_creacion
+    def __init__(self, id): # Constructor que recibe un identificador único para la entidad y lo asigna a un atributo, además de registrar la fecha de creación.
+        self.id = id # Asigna el identificador único a un atributo de la instancia.
+        self.fecha = datetime.now().strftime('%Y-%m-%d %H:%M') # Registra la fecha y hora de creación de la entidad en un formato legible.
+    
+    def get_id(self): # Método getter para obtener el identificador de la entidad.
+        return self._id # Retorna el identificador de la entidad.
+    
+    def get_fecha(self): # Método getter para obtener la fecha de creación de la entidad.
+        return self._fecha # Retorna la fecha de creación de la entidad.
 
     @abstractmethod
     def describir(self):
