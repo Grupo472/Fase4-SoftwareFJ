@@ -61,8 +61,12 @@ class EntidadSistema(ABC):
     Define la interfaz común: describir y validar.
     """
 
+    def __init__(self, id: int, fecha_creacion: str):
+        self.id = id
+        self.fecha_creacion = fecha_creacion
+
     @abstractmethod
-    def describir(self) -> str:
+    def describir(self):
         """Retorna una descripción textual de la entidad."""
         pass
 
