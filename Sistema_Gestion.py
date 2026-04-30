@@ -80,42 +80,69 @@ class EntidadSistema(ABC):
         """Valida que la entidad esté en un estado correcto."""
         pass
 
+    
 #==============================================================================
-# CLASE CLIENTE 
+# CLASE CLIENTE  # Tu rama integracion corregida acorde a revicion no uso entidadbase pues me genera error
 #==============================================================================
-class Cliente:  # Define la clase Cliente
 
-    def __init__(self, nombre, edad, correo):  # Constructor
-        self.set_nombre(nombre)  # Llama método para validar y asignar nombre
-        self.set_edad(edad)  # Llama método para validar y asignar edad
-        self.set_correo(correo)  # Llama método para validar y asignar correo
+class Cliente(EntidadSistema):  # Define la clase Cliente heredando de EntidadBase para obtener id y fecha automáticamente
 
-    def set_nombre(self, nombre):  # Método para establecer nombre
-        if not isinstance(nombre, str) or nombre.strip() == "":  # Valida tipo y vacío
-            raise ClienteError("El nombre no puede estar vacío")  # Lanza excepción personalizada
+    def __init__(self, id, nombre, correo, telefono):  # Constructor que recibe id, nombre, correo y teléfono
+        super().__init__(id)  # Llama al constructor de la clase padre para inicializar id y fecha de creación
+
+        self.set_nombre(nombre)  # Llama al método setter para validar y asignar el nombre
+        self.set_correo(correo)  # Llama al setter para validar el correo con expresión regular
+        self.set_telefono(telefono)  # Llama al setter para validar y asignar el teléfono
+
+    # VALIDACIÓN NOMBRE
+    # ============================
+
+    def set_nombre(self, nombre):  # Método para establecer el nombre del cliente
+        if not isinstance(nombre, str) or nombre.strip() == "":  # Verifica que el nombre sea texto y no esté vacío
+            raise ClienteError("El nombre no puede estar vacío")  # Lanza excepción personalizada si la validación falla
         self.__nombre = nombre  # Guarda el nombre como atributo privado
 
-    def set_edad(self, edad):  # Método para establecer edad
-        if not isinstance(edad, int) or edad <= 0:  # Valida entero positivo
-            raise ClienteError("La edad debe ser un número positivo")  # Lanza error
-        self.__edad = edad  # Guarda edad
+    def get_nombre(self):  # Método getter para obtener el nombre
+        return self.__nombre  # Retorna el nombre almacenado
 
-    def set_correo(self, correo):  # Método para establecer correo
-        if "@" not in correo:  # Valida que contenga @
-            raise ClienteError("Correo inválido")  # Lanza error
-        self.__correo = correo  # Guarda correo
+    # VALIDACIÓN CORREO (REGEX)
+    # ============================
 
-    def get_nombre(self):  # Método getter del nombre
-        return self.__nombre  # Retorna nombre
+    def set_correo(self, correo):  # Método para establecer el correo electrónico
+        patron = r"^[\w\.-]+@[\w\.-]+\.\w+$"  # Define la expresión regular para validar el formato de email
+        if not re.match(patron, correo):  # Verifica si el correo cumple el patrón definido
+            raise ClienteError("Correo inválido")  # Lanza excepción si el correo no es válido
+        self.__correo = correo  # Guarda el correo como atributo privado
 
-    def get_edad(self):  # Getter de edad
-        return self.__edad  # Retorna edad
+    def get_correo(self):  # Método getter del correo
+        return self.__correo  # Retorna el correo almacenado
 
-    def get_correo(self):  # Getter de correo
-        return self.__correo  # Retorna correo
+    # VALIDACIÓN TELÉFONO
+    # ============================
 
-    def mostrar_info(self):  # Método para mostrar datos
-        return f"Cliente: {self.__nombre}, Edad: {self.__edad}, Correo: {self.__correo}"  # Retorna string
+    def set_telefono(self, telefono):  # Método para establecer el número de teléfono
+        if not telefono.isdigit() or len(telefono) < 7:  # Verifica que tenga solo números y mínimo 7 dígitos
+            raise ClienteError("El teléfono debe tener al menos 7 dígitos")  # Lanza excepción si no cumple la validación
+        self.__telefono = telefono  # Guarda el teléfono como atributo privado
+
+    def get_telefono(self):  # Método getter del teléfono
+        return self.__telefono  # Retorna el teléfono almacenado
+
+    # MÉTODOS OBLIGATORIOS
+    # ============================
+
+    def describir(self):  # Método obligatorio heredado de la clase abstracta
+        return f"Cliente {self.__nombre} - Correo: {self.__correo} - Teléfono: {self.__telefono}"  # Retorna una descripción del cliente
+
+    def validar(self):  # Método obligatorio heredado de la clase abstracta
+        return True  # Retorna True indicando que el cliente es válido (puede ampliarse con más validaciones)
+
+
+    # MÉTODO ADICIONAL
+    # ============================
+
+    def mostrar_info(self):  # Método para mostrar la información completa del cliente
+        return f"Cliente: {self.__nombre}, Correo: {self.__correo}, Teléfono: {self.__telefono}"  # Retorna un string con los datos del cliente
 
 #==============================================================================
 # CLASE SERVICIO
