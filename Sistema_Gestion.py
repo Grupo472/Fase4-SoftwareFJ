@@ -259,93 +259,102 @@ class AlquilerEquipo(Servicio):
         return (f"Equipo '{self._nombre}' ({self.__tipo_equipo}) "
                 f"| Precio: ${self._precio_hora}/h | Depósito: ${self.__deposito}")
         
-#==============================================================================
+# ==========================
 # CLASE RESERVA
-#==============================================================================
-class Reserva:
+# ==========================
+class Reserva(EntidadSistema):
+   
     def __init__(self, cliente, servicio, duracion):
-        try:
-            # Validación cliente (sin depender tanto del tipo exacto)
-            if cliente is None:
-                raise ReservaError("El cliente no puede ser None")
+        # Validamos que cliente sea del tipo correcto
+        if not isinstance(cliente, Cliente):
+            raise ReservaError("Cliente inválido")
 
-            # Validación servicio (flexible por errores del grupo)
-            if servicio is None:
-                raise ReservaError("El servicio no puede ser None")
+        # Validamos que servicio sea una instancia válida de Servicio
+        if not isinstance(servicio, Servicio):
+            raise ReservaError("Servicio inválido")
 
-            # Validación duración
-            if not isinstance(duracion, (int, float)) or duracion <= 0:
-                raise ReservaError("Duración inválida")
+        # Validamos que la duración sea numérica y positiva
+        if not isinstance(duracion, (int, float)) or duracion <= 0:
+            raise ReservaError("Duración inválida")
 
-            self.cliente = cliente
-            self.servicio = servicio
-            self.duracion = duracion
-            self.estado = "pendiente"
+        self.cliente = cliente
+        self.servicio = servicio
+        self.duracion = duracion
 
-            logger.info("Reserva creada correctamente")
+        # Estado inicial de la reserva
+        self.estado = "pendiente"
 
-        except Exception as e:
-            logger.error(f"Error al crear reserva: {e}")
-            raise ReservaError(str(e)) from e
+        # Registro en logs
+        logger.info("Reserva creada correctamente")
 
     # ==========================
-    # CONFIRMAR
+    # CONFIRMAR RESERVA
     # ==========================
     def confirmar(self):
-        try:
-            if self.estado == "cancelada":
-                raise ReservaError("No se puede confirmar una reserva cancelada")
+       
+        # No se puede confirmar una reserva cancelada
+        if self.estado == "cancelada":
+            raise ReservaError("No se puede confirmar una reserva cancelada")
 
-            # Verificación flexible (por si no existe el método)
-            if hasattr(self.servicio, "esta_disponible"):
-                if not self.servicio.esta_disponible():
-                    raise ReservaError("Servicio no disponible")
+        # Se verifica disponibilidad del servicio
+        if not self.servicio.esta_disponible():
+            raise ReservaError("Servicio no disponible")
 
-            self.estado = "confirmada"
-            logger.info("Reserva confirmada")
+        # Cambio de estado
+        self.estado = "confirmada"
 
-        except Exception as e:
-            logger.error(f"Error al confirmar: {e}")
+        # Registro en logs
+        logger.info("Reserva confirmada")
 
     # ==========================
-    # CANCELAR
+    # CANCELAR RESERVA
     # ==========================
     def cancelar(self):
-        try:
-            if self.estado == "confirmada":
-                raise ReservaError("No se puede cancelar una reserva confirmada")
 
-            self.estado = "cancelada"
-            logger.info("Reserva cancelada")
+        # No se puede cancelar si ya fue procesada o ya estaba cancelada
+        if self.estado in ["procesada", "cancelada"]:
+            raise ReservaError("No se puede cancelar esta reserva")
 
-        except Exception as e:
-            logger.error(f"Error al cancelar: {e}")
+        # Cambio de estado
+        self.estado = "cancelada"
+
+        # Registro en logs
+        logger.info("Reserva cancelada")
 
     # ==========================
-    # PROCESAR
+    # PROCESAR RESERVA
     # ==========================
     def procesar(self):
+    
         try:
+            # No se puede procesar una reserva cancelada
             if self.estado == "cancelada":
                 raise ReservaError("No se puede procesar una reserva cancelada")
 
-            # Verifica que el servicio tenga el método
-            if not hasattr(self.servicio, "calcular_costo"):
-                raise ReservaError("El servicio no tiene método calcular_costo")
-
-            # Intento flexible de cálculo (por diferencias de parámetros)
-            try:
-                costo = self.servicio.calcular_costo(self.duracion)
-            except TypeError:
-                # por si el método requiere más parámetros
-                costo = self.servicio.calcular_costo(self.duracion, 0, False)
+            # Se calcula el costo usando el método del servicio
+            # Se asume que el servicio implementa correctamente calcular_costo
+            costo = self.servicio.calcular_costo(self.duracion)
 
         except Exception as e:
+            # Se registra el error en logs
             logger.error(f"Error al procesar reserva: {e}")
 
+            # Se relanza la excepción con encadenamiento
+            raise ReservaError("Error al procesar la reserva") from e
+
         else:
+            # Si todo salió bien, se actualiza el estado
+            self.estado = "procesada"
+
+            # Se registra el resultado
             logger.info(f"Costo calculado: {costo}")
+
+            # Salida por consola (puede usarse para pruebas)
             print(f"Costo de la reserva: {costo}")
 
+            # Se retorna el costo para uso posterior (tests, reportes, etc.)
+            return costo
+
         finally:
+            # Este bloque se ejecuta siempre, haya error o no
             logger.info("Proceso de reserva finalizado")
