@@ -147,7 +147,7 @@ class Cliente(EntidadSistema):  # Define la clase Cliente heredando de EntidadBa
 #==============================================================================
 # CLASE SERVICIO
 #==============================================================================
-lass Servicio(EntidadBase, ABC):
+class Servicio(EntidadSistema, ABC):
     """Clase abstracta base para los servicios de Software FJ."""
  
     def __init__(self, id, nombre, precio_base): # id es para EntidadBase
