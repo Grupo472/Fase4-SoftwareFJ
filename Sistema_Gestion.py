@@ -197,9 +197,9 @@ class ReservaSala(Servicio):
                  capacidad: int, disponible: bool = True) -> None:
         super().__init__(nombre, precio_hora, disponible)
         if not isinstance(capacidad, int) or capacidad <= 0:
-            raise ErrorServicio("La capacidad de la sala debe ser un entero positivo.")
+            raise ServicioError("La capacidad de la sala debe ser un entero positivo.") # Valida que la capacidad sea un número entero positivo, ya que una sala no puede tener una capacidad negativa o no entera.
         self.__capacidad = capacidad
-        registrar_log("INFO", f"Servicio ReservaSala creado: {nombre}")
+        logger.info ("INFO", f"Servicio ReservaSala creado: {nombre}")
 
     def get_capacidad(self) -> int:
         return self.__capacidad
@@ -208,9 +208,9 @@ class ReservaSala(Servicio):
                        aplicar_iva: bool = False) -> float:
         """Costo base + cargo adicional de $5000 por hora si hay más de 20 personas."""
         if horas <= 0:
-            raise ErrorDuracion("Las horas deben ser un valor positivo.")
+            raise ServicioError("Las horas deben ser un valor positivo.")
         if not (0 <= descuento <= 100):
-            raise ErrorServicio("El descuento debe estar entre 0 y 100.")
+            raise ServicioError("El descuento debe estar entre 0 y 100.")
         cargo_extra = 5_000 if self.__capacidad > 20 else 0
         subtotal = (self._precio_hora + cargo_extra) * horas
         subtotal -= subtotal * (descuento / 100)
