@@ -232,12 +232,12 @@ class AlquilerEquipo(Servicio):
                  disponible: bool = True) -> None:
         super().__init__(nombre, precio_hora, disponible)
         if not tipo_equipo or not isinstance(tipo_equipo, str):
-            raise ErrorServicio("El tipo de equipo no puede estar vacío.")
+            raise ServicioError("El tipo de equipo no puede estar vacío.")
         if deposito < 0:
-            raise ErrorServicio("El depósito no puede ser negativo.")
+            raise ServicioError("El depósito no puede ser negativo.")
         self.__tipo_equipo = tipo_equipo
         self.__deposito = deposito
-        registrar_log("INFO", f"Servicio AlquilerEquipo creado: {nombre}")
+        logger.info ("INFO", f"Servicio AlquilerEquipo creado: {nombre}")
 
     def get_deposito(self) -> float:
         return self.__deposito
@@ -246,9 +246,9 @@ class AlquilerEquipo(Servicio):
                        aplicar_iva: bool = False) -> float:
         """Costo = (precio_hora × horas + depósito) con descuento e IVA opcionales."""
         if horas <= 0:
-            raise ErrorDuracion("Las horas deben ser un valor positivo.")
+            raise ServicioError("Las horas deben ser un valor positivo.")
         if not (0 <= descuento <= 100):
-            raise ErrorServicio("El descuento debe estar entre 0 y 100.")
+            raise ServicioError("El descuento debe estar entre 0 y 100.")
         subtotal = self._precio_hora * horas + self.__deposito
         subtotal -= subtotal * (descuento / 100)
         if aplicar_iva:
