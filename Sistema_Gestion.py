@@ -266,6 +266,7 @@ class Reserva(EntidadSistema):
    
     def __init__(self, cliente, servicio, duracion):
         # Validamos que cliente sea del tipo correcto
+        super().__init__(str(uuid.uuid4()))  # Generamos un ID único para la reserva
         if not isinstance(cliente, Cliente):
             raise ReservaError("Cliente inválido")
 
@@ -358,3 +359,12 @@ class Reserva(EntidadSistema):
         finally:
             # Este bloque se ejecuta siempre, haya error o no
             logger.info("Proceso de reserva finalizado")
+            
+    def describir(self): # Método obligatorio heredado de la clase abstracta.
+        return (f"Reserva [{self._id}] | "# ID único de la reserva
+                f"Cliente: {self._cliente.get_nombre()} | " # Nombre del cliente asociado a la reserva
+                f"Servicio: {self._servicio.get_nombre()} | " # Nombre del servicio reservado
+                f"Duración: {self._duracion}h | Estado: {self._estado}") #  Duración de la reserva y su estado actual (pendiente, confirmada, procesada, cancelada)
+
+    def validar(self) -> bool:# Método obligatorio heredado de la clase abstracta.
+        return self._estado in ["pendiente", "confirmada", "procesada", "cancelada"] # Valida que el estado de la reserva sea uno de los estados permitidos, lo que indica que la reserva está en un estado correcto.
