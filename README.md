@@ -15,7 +15,7 @@
 | Edisson Ferney Parrado Reyes | [@EdissonParrado](https://github.com/EdissonParrado) | `imports` `logs` `excepciones`   | #1 #2 #3 |
 | Alexandra Tautiva Betancur | [@ALXBETANCUR](https://github.com/ALXBETANCUR) | `clase-servicio` `servicio-sala` `entidadbase`| #4 #6 #7 #28 |
 | Daniel Eduardo Caro Rodriguez | [@carorodriguezdanieleduardo-dot](https://github.com/carorodriguezdanieleduardo-dot)| `tu-rama` `----`  | #5 #9|
-| Hugo Enrique Florez Granados | [@hugoflorez62](https://github.com/hugoflorez62) | `hugoflorez62-patch-1` `----`| #8 #29 |
+| Hugo Enrique Florez Granados | [@hugoflorez62](https://github.com/hugoflorez62) | `hugoflorez62-patch-1` `asesoria-especializada`| #8 #29 |
 | Jhonnatan Steven Gonzales Ramirez | [@Jturing589](https://github.com/Jturing589) | `----` | #30 |
 ---
 
