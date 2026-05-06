@@ -262,7 +262,71 @@ class AlquilerEquipo(Servicio):
                 f"| Precio: ${self._precio_base}/h | Depósito: ${self.__deposito}")
     def validar(self) -> bool:
         return True
+    
+# =============================
+# CLASE ASESORIA ESPECIALIZADA
+# =============================
+class AsesoriaEspecializada(Servicio):
+    """
+    Servicio de asesoría profesional por horas.
+    """
+    def __init__(self, nombre: str, precio_base: float,
+                 especialidad: str, max_horas: int = 8):
         
+        try:
+            super().__init__(str(uuid.uuid4()), nombre, precio_base)
+        except TypeError:
+            super().__init__(nombre, precio_base)
+
+        if not especialidad or not isinstance(especialidad, str):
+            raise ServicioError("La especialidad no puede estar vacía.")
+
+        if not isinstance(max_horas, int) or max_horas <= 0:
+            raise ServicioError("El máximo de horas debe ser un entero positivo.")
+
+        self.__especialidad = especialidad
+        self.__max_horas = max_horas
+
+        logger.info(f"Servicio AsesoriaEspecializada creado: {nombre}")
+
+    # ==========================
+    # VALIDACIÓN (OBLIGATORIA)
+    # ==========================
+    def validar_parametros(self, horas, descuento):
+        if horas <= 0:
+            raise ServicioError("Las horas deben ser mayores a 0")
+
+        if horas > self.__max_horas:
+            raise ServicioError(
+                f"No se permiten más de {self.__max_horas} horas de asesoría"
+            )
+
+        if not (0 <= descuento <= 100):
+            raise ServicioError("El descuento debe estar entre 0 y 100")
+
+    # ==========================
+    # CÁLCULO (POLIMORFISMO)
+    # ==========================
+    def calcular_costo(self, horas=1, con_iva=False, descuento=0):
+        self.validar_parametros(horas, descuento)
+
+        recargo = 1.10  # 10% adicional por especialización
+
+        subtotal = self._precio_base * horas * recargo
+
+        return self.aplicar_descuento_iva(subtotal, con_iva, descuento)
+
+    # ==========================
+    # DESCRIPCIÓN
+    # ==========================
+    def describir(self):
+        return (f"Asesoría '{self._nombre}' ({self.__especialidad}) "
+                f"| Precio: ${self._precio_base}/h "
+                f"| Máx horas: {self.__max_horas}")
+
+    def validar(self) -> bool:
+        return True   
+       
 # ==========================
 # CLASE RESERVA
 # ==========================
