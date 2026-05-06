@@ -61,8 +61,8 @@ class EntidadSistema(ABC):
     Define la interfaz común: describir y validar.
     """
     def __init__(self, id): # Constructor que recibe un identificador único para la entidad y lo asigna a un atributo, además de registrar la fecha de creación.
-        self.id = id # Asigna el identificador único a un atributo de la instancia.
-        self.fecha = datetime.now().strftime('%Y-%m-%d %H:%M') # Registra la fecha y hora de creación de la entidad en un formato legible.
+        self._id = id # Asigna el identificador único a un atributo de la instancia.
+        self._fecha = datetime.now().strftime('%Y-%m-%d %H:%M') # Registra la fecha y hora de creación de la entidad en un formato legible.
     
     def get_id(self): # Método getter para obtener el identificador de la entidad.
         return self._id # Retorna el identificador de la entidad.
@@ -147,7 +147,7 @@ class Cliente(EntidadSistema):  # Define la clase Cliente heredando de EntidadBa
 #==============================================================================
 # CLASE SERVICIO
 #==============================================================================
-lass Servicio(EntidadBase, ABC):
+class Servicio(EntidadSistema, ABC):
     """Clase abstracta base para los servicios de Software FJ."""
  
     def __init__(self, id, nombre, precio_base): # id es para EntidadBase
@@ -193,13 +193,13 @@ class ReservaSala(Servicio):
     Incluye capacidad máxima de personas como parámetro adicional.
     """
 
-    def __init__(self, nombre: str, precio_hora: float,
+    def __init__(self, nombre: str, precio_base: float,
                  capacidad: int, disponible: bool = True) -> None:
-        super().__init__(nombre, precio_hora, disponible)
+        super().__init__(nombre, precio_base) 
         if not isinstance(capacidad, int) or capacidad <= 0:
-            raise ErrorServicio("La capacidad de la sala debe ser un entero positivo.")
+            raise ServicioError("La capacidad de la sala debe ser un entero positivo.") # Valida que la capacidad sea un número entero positivo, ya que una sala no puede tener una capacidad negativa o no entera.
         self.__capacidad = capacidad
-        registrar_log("INFO", f"Servicio ReservaSala creado: {nombre}")
+        logger.info ("INFO", f"Servicio ReservaSala creado: {nombre}")
 
     def get_capacidad(self) -> int:
         return self.__capacidad
@@ -208,11 +208,11 @@ class ReservaSala(Servicio):
                        aplicar_iva: bool = False) -> float:
         """Costo base + cargo adicional de $5000 por hora si hay más de 20 personas."""
         if horas <= 0:
-            raise ErrorDuracion("Las horas deben ser un valor positivo.")
+            raise ServicioError("Las horas deben ser un valor positivo.")
         if not (0 <= descuento <= 100):
-            raise ErrorServicio("El descuento debe estar entre 0 y 100.")
+            raise ServicioError("El descuento debe estar entre 0 y 100.")
         cargo_extra = 5_000 if self.__capacidad > 20 else 0
-        subtotal = (self._precio_hora + cargo_extra) * horas
+        subtotal = (self._precio_base + cargo_extra) * horas
         subtotal -= subtotal * (descuento / 100)
         if aplicar_iva:
             subtotal *= 1.19
@@ -220,36 +220,38 @@ class ReservaSala(Servicio):
 
     def describir(self) -> str:
         return (f"Sala '{self._nombre}' | Capacidad: {self.__capacidad} personas "
-                f"| Precio: ${self._precio_hora}/h")
+                f"| Precio: ${self._precio_base}/h")
+    def validar(self) -> bool:
+        return True
 class AlquilerEquipo(Servicio):
     """
     Servicio de alquiler de equipos tecnológicos.
     Incluye tipo de equipo y un depósito de garantía.
     """
 
-    def __init__(self, nombre: str, precio_hora: float,
+    def __init__(self, nombre: str, precio_base: float,
                  tipo_equipo: str, deposito: float = 0.0,
                  disponible: bool = True) -> None:
-        super().__init__(nombre, precio_hora, disponible)
+        super().__init__(nombre, precio_base)
         if not tipo_equipo or not isinstance(tipo_equipo, str):
-            raise ErrorServicio("El tipo de equipo no puede estar vacío.")
+            raise ServicioError("El tipo de equipo no puede estar vacío.")
         if deposito < 0:
-            raise ErrorServicio("El depósito no puede ser negativo.")
+            raise ServicioError("El depósito no puede ser negativo.")
         self.__tipo_equipo = tipo_equipo
         self.__deposito = deposito
-        registrar_log("INFO", f"Servicio AlquilerEquipo creado: {nombre}")
+        logger.info ("INFO", f"Servicio AlquilerEquipo creado: {nombre}")
 
     def get_deposito(self) -> float:
         return self.__deposito
 
     def calcular_costo(self, horas: float, descuento: float = 0.0,
                        aplicar_iva: bool = False) -> float:
-        """Costo = (precio_hora × horas + depósito) con descuento e IVA opcionales."""
+        """Costo = (precio_base × horas + depósito) con descuento e IVA opcionales."""
         if horas <= 0:
-            raise ErrorDuracion("Las horas deben ser un valor positivo.")
+            raise ServicioError("Las horas deben ser un valor positivo.")
         if not (0 <= descuento <= 100):
-            raise ErrorServicio("El descuento debe estar entre 0 y 100.")
-        subtotal = self._precio_hora * horas + self.__deposito
+            raise ServicioError("El descuento debe estar entre 0 y 100.")
+        subtotal = self._precio_base * horas + self.__deposito
         subtotal -= subtotal * (descuento / 100)
         if aplicar_iva:
             subtotal *= 1.19
@@ -257,7 +259,9 @@ class AlquilerEquipo(Servicio):
 
     def describir(self) -> str:
         return (f"Equipo '{self._nombre}' ({self.__tipo_equipo}) "
-                f"| Precio: ${self._precio_hora}/h | Depósito: ${self.__deposito}")
+                f"| Precio: ${self._precio_base}/h | Depósito: ${self.__deposito}")
+    def validar(self) -> bool:
+        return True
         
 # ==========================
 # CLASE RESERVA
@@ -278,12 +282,12 @@ class Reserva(EntidadSistema):
         if not isinstance(duracion, (int, float)) or duracion <= 0:
             raise ReservaError("Duración inválida")
 
-        self.cliente = cliente
-        self.servicio = servicio
-        self.duracion = duracion
+        self._cliente = cliente
+        self._servicio = servicio
+        self._duracion = duracion
 
         # Estado inicial de la reserva
-        self.estado = "pendiente"
+        self._estado = "pendiente"
 
         # Registro en logs
         logger.info("Reserva creada correctamente")
@@ -294,15 +298,15 @@ class Reserva(EntidadSistema):
     def confirmar(self):
        
         # No se puede confirmar una reserva cancelada
-        if self.estado == "cancelada":
+        if self._estado == "cancelada":
             raise ReservaError("No se puede confirmar una reserva cancelada")
 
         # Se verifica disponibilidad del servicio
-        if not self.servicio.esta_disponible():
+        if not self._servicio.esta_disponible():
             raise ReservaError("Servicio no disponible")
 
         # Cambio de estado
-        self.estado = "confirmada"
+        self._estado = "confirmada"
 
         # Registro en logs
         logger.info("Reserva confirmada")
@@ -313,11 +317,11 @@ class Reserva(EntidadSistema):
     def cancelar(self):
 
         # No se puede cancelar si ya fue procesada o ya estaba cancelada
-        if self.estado in ["procesada", "cancelada"]:
+        if self._estado in ["procesada", "cancelada"]:
             raise ReservaError("No se puede cancelar esta reserva")
 
         # Cambio de estado
-        self.estado = "cancelada"
+        self._estado = "cancelada"
 
         # Registro en logs
         logger.info("Reserva cancelada")
@@ -329,12 +333,12 @@ class Reserva(EntidadSistema):
     
         try:
             # No se puede procesar una reserva cancelada
-            if self.estado == "cancelada":
+            if self._estado == "cancelada":
                 raise ReservaError("No se puede procesar una reserva cancelada")
 
             # Se calcula el costo usando el método del servicio
             # Se asume que el servicio implementa correctamente calcular_costo
-            costo = self.servicio.calcular_costo(self.duracion)
+            costo = self._servicio.calcular_costo(self._duracion)
 
         except Exception as e:
             # Se registra el error en logs
@@ -345,7 +349,7 @@ class Reserva(EntidadSistema):
 
         else:
             # Si todo salió bien, se actualiza el estado
-            self.estado = "procesada"
+            self._estado = "procesada"
 
             # Se registra el resultado
             logger.info(f"Costo calculado: {costo}")
