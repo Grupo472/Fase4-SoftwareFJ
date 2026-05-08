@@ -195,7 +195,7 @@ class ReservaSala(Servicio):
 
     def __init__(self, nombre: str, precio_base: float,
                  capacidad: int, disponible: bool = True) -> None:
-        super().__init__(nombre, precio_base) 
+        super().__init__(str(uuid.uuid4()), nombre, precio_base)# Genera un ID único para cada servicio de reserva de sala utilizando uuid4, lo que garantiza que cada sala tenga un identificador único en el sistema.
         if not isinstance(capacidad, int) or capacidad <= 0:
             raise ServicioError("La capacidad de la sala debe ser un entero positivo.") # Valida que la capacidad sea un número entero positivo, ya que una sala no puede tener una capacidad negativa o no entera.
         self.__capacidad = capacidad
@@ -238,7 +238,7 @@ class AlquilerEquipo(Servicio):
     def __init__(self, nombre: str, precio_base: float,
                  tipo_equipo: str, deposito: float = 0.0,
                  disponible: bool = True) -> None:
-        super().__init__(nombre, precio_base)
+        super().__init__(str(uuid.uuid4()), nombre, precio_base)
         if not tipo_equipo or not isinstance(tipo_equipo, str):
             raise ServicioError("El tipo de equipo no puede estar vacío.")
         if deposito < 0:
