@@ -78,16 +78,14 @@ git push origin nombre-de-tu-rama
 
 ---
 
-## 🔧 Ajustes y Correcciones del Líder (Edisson Parrado)
+## 🔧 Ajustes y Correcciones por parte del colaborador (Edisson Parrado)
 
 | Rama | Descripción | PR | Estado |
 |------|-------------|----|---------|
 | `feat/completar-reservasala-alquilerequipo` | Completar clases ReservaSala y AlquilerEquipo con uuid, logger y validaciones | [#40](https://github.com/Grupo472/Fase4-SoftwareFJ/pull/40) | ✅ Abierto |
-| `fix: corrección y mejora EntidadSistema (sección ALXBETANCUR)` | Correcciones en clase base y mejoras de estructura | [#35](https://github.com/Grupo472/Fase4-SoftwareFJ/pull/35) | ✅ Fusionado |
-| `fix: completar clase Reserva con inicialización, describir() y validar()` | Implementación de métodos abstractos en Reserva | [#34](https://github.com/Grupo472/Fase4-SoftwareFJ/pull/34) | ✅ Fusionado |
-| `fix: corrección y mejora AsesoriaEspecializada (rama integración corregida)` | Ajustes acorde a revisión en clase especializada | [#39](https://github.com/Grupo472/Fase4-SoftwareFJ/pull/39) | ✅ Fusionado |
-| `Agrego la Clase de AsesoriaEspecializada` | Implementación de servicio especializado con herencia | [#39](https://github.com/Grupo472/Fase4-SoftwareFJ/pull/39) | ✅ Fusionado |
-| `Update Sistema_Gestion.py` | Actualizaciones al archivo principal | [#36](https://github.com/Grupo472/Fase4-SoftwareFJ/pull/36) | ✅ Fusionado |
+| `feat/completar-clase-reserva` | Completar clase Reserva con inicialización, describir() y validar()| [#38](https://github.com/Grupo472/Fase4-SoftwareFJ/pull/38) | ✅ Fusionado |
+| `fix/errores-criticos` | Corregir errores críticos en clases de servicios - excepciones y logger | [#37](https://github.com/Grupo472/Fase4-SoftwareFJ/pull/37) | ✅ Fusionado |
+| `fix/EntidadSistema` | Corrección y mejora EntidadSistema (sección ALXBETANCUR)| [#35](https://github.com/Grupo472/Fase4-SoftwareFJ/pull/35) | ✅ Fusionado |
 
 
          
