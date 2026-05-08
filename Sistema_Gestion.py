@@ -199,7 +199,7 @@ class ReservaSala(Servicio):
         if not isinstance(capacidad, int) or capacidad <= 0:
             raise ServicioError("La capacidad de la sala debe ser un entero positivo.") # Valida que la capacidad sea un número entero positivo, ya que una sala no puede tener una capacidad negativa o no entera.
         self.__capacidad = capacidad
-        logger.info ("INFO", f"Servicio ReservaSala creado: {nombre}")
+        logger.info(f"Servicio ReservaSala creado: {nombre} con capacidad {capacidad} personas") # Registra en el logger la creación de un nuevo servicio de reserva de sala, incluyendo su nombre y capacidad, lo que ayuda a mantener un historial de los servicios disponibles en el sistema.
 
     def get_capacidad(self) -> int:
         return self.__capacidad
@@ -245,7 +245,7 @@ class AlquilerEquipo(Servicio):
             raise ServicioError("El depósito no puede ser negativo.")
         self.__tipo_equipo = tipo_equipo
         self.__deposito = deposito
-        logger.info ("INFO", f"Servicio AlquilerEquipo creado: {nombre}")
+        logger.info(f"Servicio AlquilerEquipo creado: {nombre} - Tipo: {tipo_equipo} - Depósito: ${deposito}")
 
     def get_deposito(self) -> float:
         return self.__deposito
@@ -299,7 +299,7 @@ class AsesoriaEspecializada(Servicio):
         self.__especialidad = especialidad
         self.__max_horas = max_horas
 
-        logger.info(f"Servicio AsesoriaEspecializada creado: {nombre}")
+        logger.info(f"Servicio AsesoriaEspecializada creado: {nombre} - Especialidad: {especialidad} - Máx Horas: {max_horas}")
 
     # ==========================
     # VALIDACIÓN (OBLIGATORIA)
