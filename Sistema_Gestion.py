@@ -203,7 +203,13 @@ class ReservaSala(Servicio):
 
     def get_capacidad(self) -> int:
         return self.__capacidad
-
+    def validar_parametros(self, horas, descuento=0): # Valida que la sala esté disponible, que las horas sean positivas y que el descuento esté entre 0 y 100.
+        if not self._disponible:
+            raise ServicioError(f"La sala '{self._nombre}' no está disponible.")# Valida que la sala esté disponible antes de permitir la reserva, lo que evita conflictos de reservas para la misma sala.
+        if horas <= 0:
+            raise ServicioError("Las horas deben ser un valor positivo.") # Valida que el número de horas para la reserva sea un valor positivo, ya que no tiene sentido reservar una sala por un tiempo negativo o cero.
+        if not (0 <= descuento <= 100):
+            raise ServicioError("El descuento debe estar entre 0 y 100.") # Valida que el descuento aplicado a la reserva esté dentro del rango permitido (0% a 100%), lo que garantiza que el cálculo del costo sea correcto y no genere resultados negativos o excesivos.
     def calcular_costo(self, horas: float, descuento: float = 0.0,
                        aplicar_iva: bool = False) -> float:
         """Costo base + cargo adicional de $5000 por hora si hay más de 20 personas."""
@@ -243,7 +249,13 @@ class AlquilerEquipo(Servicio):
 
     def get_deposito(self) -> float:
         return self.__deposito
-
+    def validar_parametros(self, horas, descuento=0): # Valida que el equipo esté disponible, que las horas sean positivas y que el descuento esté entre 0 y 100.
+        if not self._disponible:
+            raise ServicioError(f"El equipo '{self._nombre}' no está disponible.") # Valida que el equipo esté disponible antes de permitir el alquiler.
+        if horas <= 0:
+            raise ServicioError("Las horas deben ser un valor positivo.") # Valida que el número de horas para el alquiler sea un valor positivo.
+        if not (0 <= descuento <= 100):
+            raise ServicioError("El descuento debe estar entre 0 y 100.") # Valida que el descuento aplicado al alquiler esté dentro del rango permitido (0% a 100%).
     def calcular_costo(self, horas: float, descuento: float = 0.0,
                        aplicar_iva: bool = False) -> float:
         """Costo = (precio_base × horas + depósito) con descuento e IVA opcionales."""
