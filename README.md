@@ -89,22 +89,12 @@ git push origin nombre-de-tu-rama
 | `Agrego la Clase de AsesoriaEspecializada` | Implementación de servicio especializado con herencia | [#39](https://github.com/Grupo472/Fase4-SoftwareFJ/pull/39) | ✅ Fusionado |
 | `Update Sistema_Gestion.py` | Actualizaciones al archivo principal | [#36](https://github.com/Grupo472/Fase4-SoftwareFJ/pull/36) | ✅ Fusionado |
 
-### 📌 Rama Principal de Trabajo
 
-**`main`** - Rama por defecto donde se fusionan todos los PRs tras aprobación y revisión del líder.
-
-### 🌿 Branches Activos del Líder
-
-- **`feat/completar-reservasala-alquilerequipo`** (9 minutos atrás)
--   - Feature branch para completar las clases de Reserva Sala y Alquiler Equipo
-    -   - Incluye: UUID generación, logger integrado, validaciones exhaustivas
-        -   - Respaldado por PR #40
          
-            - ### ✨ Cambios Principales Realizados
-         
-            - 1. **Corrección de Herencia** - EntidadSistema ahora funciona correctamente como clase base abstracta
-              2. 2. **Métodos Abstractos** - Implementación obligatoria de `describir()` y `validar()` en todas las entidades
-                 3. 3. **Logging Robusto** - Integración consistente del logger en todas las excepciones y eventos críticos
-                    4. 4. **Validaciones Mejoradas** - Regex para emails, validaciones de rango para precios y descuentos
-                       5. 5. **UUID Automático** - Generación de identificadores únicos para ReservaSala y AlquilerEquipo
-                          6. 6. **Manejo de Excepciones** - Excepciones personalizadas con encadenamiento (`from e`)
+- ### ✨ Cambios Principales Realizados
+  - - 1. **Corrección de Herencia** - EntidadSistema ahora funciona correctamente como clase base abstracta
+      2. **Métodos Abstractos** - Implementación obligatoria de `describir()` y `validar()` en todas las entidades
+      3. **Logging Robusto** - Integración consistente del logger en todas las excepciones y eventos críticos
+      4. **Validaciones Mejoradas** - Regex para emails, validaciones de rango para precios y descuentos
+      5. **UUID Automático** - Generación de identificadores únicos para ReservaSala y AlquilerEquipo
+      6. **Manejo de Excepciones** - Excepciones personalizadas con encadenamiento (`from e`)
