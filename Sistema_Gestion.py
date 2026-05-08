@@ -195,15 +195,21 @@ class ReservaSala(Servicio):
 
     def __init__(self, nombre: str, precio_base: float,
                  capacidad: int, disponible: bool = True) -> None:
-        super().__init__(nombre, precio_base) 
+        super().__init__(str(uuid.uuid4()), nombre, precio_base)# Genera un ID único para cada servicio de reserva de sala utilizando uuid4, lo que garantiza que cada sala tenga un identificador único en el sistema.
         if not isinstance(capacidad, int) or capacidad <= 0:
             raise ServicioError("La capacidad de la sala debe ser un entero positivo.") # Valida que la capacidad sea un número entero positivo, ya que una sala no puede tener una capacidad negativa o no entera.
         self.__capacidad = capacidad
-        logger.info ("INFO", f"Servicio ReservaSala creado: {nombre}")
+        logger.info(f"Servicio ReservaSala creado: {nombre} con capacidad {capacidad} personas") # Registra en el logger la creación de un nuevo servicio de reserva de sala, incluyendo su nombre y capacidad, lo que ayuda a mantener un historial de los servicios disponibles en el sistema.
 
     def get_capacidad(self) -> int:
         return self.__capacidad
-
+    def validar_parametros(self, horas, descuento=0): # Valida que la sala esté disponible, que las horas sean positivas y que el descuento esté entre 0 y 100.
+        if not self._disponible:
+            raise ServicioError(f"La sala '{self._nombre}' no está disponible.")# Valida que la sala esté disponible antes de permitir la reserva, lo que evita conflictos de reservas para la misma sala.
+        if horas <= 0:
+            raise ServicioError("Las horas deben ser un valor positivo.") # Valida que el número de horas para la reserva sea un valor positivo, ya que no tiene sentido reservar una sala por un tiempo negativo o cero.
+        if not (0 <= descuento <= 100):
+            raise ServicioError("El descuento debe estar entre 0 y 100.") # Valida que el descuento aplicado a la reserva esté dentro del rango permitido (0% a 100%), lo que garantiza que el cálculo del costo sea correcto y no genere resultados negativos o excesivos.
     def calcular_costo(self, horas: float, descuento: float = 0.0,
                        aplicar_iva: bool = False) -> float:
         """Costo base + cargo adicional de $5000 por hora si hay más de 20 personas."""
@@ -232,18 +238,24 @@ class AlquilerEquipo(Servicio):
     def __init__(self, nombre: str, precio_base: float,
                  tipo_equipo: str, deposito: float = 0.0,
                  disponible: bool = True) -> None:
-        super().__init__(nombre, precio_base)
+        super().__init__(str(uuid.uuid4()), nombre, precio_base)
         if not tipo_equipo or not isinstance(tipo_equipo, str):
             raise ServicioError("El tipo de equipo no puede estar vacío.")
         if deposito < 0:
             raise ServicioError("El depósito no puede ser negativo.")
         self.__tipo_equipo = tipo_equipo
         self.__deposito = deposito
-        logger.info ("INFO", f"Servicio AlquilerEquipo creado: {nombre}")
+        logger.info(f"Servicio AlquilerEquipo creado: {nombre} - Tipo: {tipo_equipo} - Depósito: ${deposito}")
 
     def get_deposito(self) -> float:
         return self.__deposito
-
+    def validar_parametros(self, horas, descuento=0): # Valida que el equipo esté disponible, que las horas sean positivas y que el descuento esté entre 0 y 100.
+        if not self._disponible:
+            raise ServicioError(f"El equipo '{self._nombre}' no está disponible.") # Valida que el equipo esté disponible antes de permitir el alquiler.
+        if horas <= 0:
+            raise ServicioError("Las horas deben ser un valor positivo.") # Valida que el número de horas para el alquiler sea un valor positivo.
+        if not (0 <= descuento <= 100):
+            raise ServicioError("El descuento debe estar entre 0 y 100.") # Valida que el descuento aplicado al alquiler esté dentro del rango permitido (0% a 100%).
     def calcular_costo(self, horas: float, descuento: float = 0.0,
                        aplicar_iva: bool = False) -> float:
         """Costo = (precio_base × horas + depósito) con descuento e IVA opcionales."""
@@ -287,7 +299,7 @@ class AsesoriaEspecializada(Servicio):
         self.__especialidad = especialidad
         self.__max_horas = max_horas
 
-        logger.info(f"Servicio AsesoriaEspecializada creado: {nombre}")
+        logger.info(f"Servicio AsesoriaEspecializada creado: {nombre} - Especialidad: {especialidad} - Máx Horas: {max_horas}")
 
     # ==========================
     # VALIDACIÓN (OBLIGATORIA)
