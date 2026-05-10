@@ -567,4 +567,4 @@ class Reserva(EntidadSistema):
 
     def validar(self) -> bool:# Método obligatorio heredado de la clase abstracta.
         return self._estado in ["pendiente", "confirmada", "procesada", "cancelada"] # Valida que el estado de la reserva sea uno de los estados permitidos, lo que indica que la reserva está en un estado correcto.
->>>>>>> origin/main
+
