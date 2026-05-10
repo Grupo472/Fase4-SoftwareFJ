@@ -51,7 +51,6 @@ class ReservaError(ErrorSistema): # Define una clase de excepción personalizada
     def __init__(self, mensaje): # Constructor que recibe un mensaje de error específico para reservas y lo formatea antes de pasarlo al constructor de ErrorSistema.
         super().__init__(f"ReservaError: {mensaje}") # Llama al constructor de ErrorSistema con un mensaje formateado que indica que se trata de un error relacionado con las reservas, lo que ayuda a identificar el origen del error en los logs.
 
-
 #==============================================================================
 # DEFINICION ENTIDAD BASE
 #==============================================================================
@@ -80,9 +79,8 @@ class EntidadSistema(ABC):
         """Valida que la entidad esté en un estado correcto."""
         pass
 
-    
 #==============================================================================
-# CLASE CLIENTE  # Tu rama integracion corregida acorde a revicion no uso entidadbase pues me genera error
+# CLASE CLIENTE  
 #==============================================================================
 
 class Cliente(EntidadSistema):  # Define la clase Cliente heredando de EntidadBase para obtener id y fecha automáticamente
@@ -273,127 +271,6 @@ class AlquilerEquipo(Servicio):
         return (f"Equipo '{self._nombre}' ({self.__tipo_equipo}) "
 
                 f"| Precio: ${self._precio_hora}/h | Depósito: ${self.__deposito}")
-#==============================================================================
-# CLASE SISTEMA GESTION
-#==============================================================================
-
-class SistemaGestion:
-    def __init__(self):
-        self._clientes  = []  # Lista interna de clientes registrados
-        self._servicios = []  # Lista interna de servicios disponibles
-        self._reservas  = []  # Lista interna de reservas creadas
-        logger.info("[SISTEMA] Software FJ iniciado correctamente")
-
-    # ------------------------------------------------------------------
-    # GESTIÓN DE CLIENTES
-    # ------------------------------------------------------------------
-
-    def registrar_cliente(self, id, nombre, correo, telefono):
-   
-        try:
-            cliente = Cliente(id, nombre, correo, telefono)
-        except ClienteError as e:
-            print(f"  {e}")
-            return None
-        else:
-            self._clientes.append(cliente)
-            print(f" Cliente registrado: {cliente.get_nombre()}")
-            return cliente
-        finally:
-            logger.info("[SISTEMA] Intento de registro de cliente finalizado")
-
-    def buscar_cliente(self, id):
-    
-        for cliente in self._clientes:
-            if cliente.get_id() == id:
-                return cliente
-        return None
-
-    def listar_clientes(self):
-        """Muestra todos los clientes registrados en el sistema."""
-        if not self._clientes:
-            print(" No hay clientes registrados.")
-            return
-        print("  Clientes registrados:")
-        for cliente in self._clientes:
-            print(f"    - {cliente.describir()}")
-
-    # ------------------------------------------------------------------
-    # GESTIÓN DE SERVICIOS
-    # ------------------------------------------------------------------
-
-    def agregar_servicio(self, servicio):
-
-        try:
-            if not isinstance(servicio, Servicio):
-                raise ServicioError("El objeto proporcionado no es un Servicio válido.")
-            self._servicios.append(servicio)
-            print(f"   Servicio agregado: {servicio.get_nombre()}")
-            return servicio
-        except ServicioError as e:
-            print(f"   {e}")
-            return None
-
-    def buscar_servicio(self, id):
-
-        for servicio in self._servicios:
-            if servicio.get_id() == id:
-                return servicio
-        return None
-
-    def listar_servicios(self):
-        if not self._servicios:
-            print("  No hay servicios registrados.")
-            return
-        print("  Servicios disponibles:")
-        for servicio in self._servicios:
-            print(f"    - {servicio.describir()}")
-
-    # ------------------------------------------------------------------
-    # GESTIÓN DE RESERVAS
-    # ------------------------------------------------------------------
-
-    def crear_reserva(self, cliente, servicio, duracion):
-
-        try:
-            reserva = Reserva(cliente, servicio, duracion)
-        except ReservaError as e:
-            print(f"   {e}")
-            return None
-        else:
-            self._reservas.append(reserva)
-            print(f"   Reserva creada: {reserva.describir()}")
-            return reserva
-
-    def buscar_reserva(self, id):
-
-        for reserva in self._reservas:
-            if reserva.get_id() == id:
-                return reserva
-        return None
-
-    def listar_reservas(self):
-        if not self._reservas:
-            print("  No hay reservas registradas.")
-            return
-        print("  Reservas registradas:")
-        for reserva in self._reservas:
-            print(f"    - {reserva.describir()}")
-
-    def listar_reservas_por_estado(self, estado):
-
-        filtradas = [r for r in self._reservas if r.get_estado() == estado]
-        if not filtradas:
-            print(f"  No hay reservas con estado '{estado}'.")
-            return
-        print(f"  Reservas con estado '{estado}':")
-        for reserva in filtradas:
-            print(f"    - {reserva.describir()}")
-
-            f"| Precio: ${self._precio_base}/h | Depósito: ${self.__deposito}"
-    def validar(self) -> bool:
-        return True
-    
 # =============================
 # CLASE ASESORIA ESPECIALIZADA
 # =============================
@@ -567,4 +444,123 @@ class Reserva(EntidadSistema):
 
     def validar(self) -> bool:# Método obligatorio heredado de la clase abstracta.
         return self._estado in ["pendiente", "confirmada", "procesada", "cancelada"] # Valida que el estado de la reserva sea uno de los estados permitidos, lo que indica que la reserva está en un estado correcto.
+#==============================================================================
+# CLASE SISTEMA GESTION
+#==============================================================================
 
+class SistemaGestion:
+    def __init__(self):
+        self._clientes  = []  # Lista interna de clientes registrados
+        self._servicios = []  # Lista interna de servicios disponibles
+        self._reservas  = []  # Lista interna de reservas creadas
+        logger.info("[SISTEMA] Software FJ iniciado correctamente")
+
+    # ------------------------------------------------------------------
+    # GESTIÓN DE CLIENTES
+    # ------------------------------------------------------------------
+
+    def registrar_cliente(self, id, nombre, correo, telefono):
+   
+        try:
+            cliente = Cliente(id, nombre, correo, telefono)
+        except ClienteError as e:
+            print(f"  {e}")
+            return None
+        else:
+            self._clientes.append(cliente)
+            print(f" Cliente registrado: {cliente.get_nombre()}")
+            return cliente
+        finally:
+            logger.info("[SISTEMA] Intento de registro de cliente finalizado")
+
+    def buscar_cliente(self, id):
+    
+        for cliente in self._clientes:
+            if cliente.get_id() == id:
+                return cliente
+        return None
+
+    def listar_clientes(self):
+        """Muestra todos los clientes registrados en el sistema."""
+        if not self._clientes:
+            print(" No hay clientes registrados.")
+            return
+        print("  Clientes registrados:")
+        for cliente in self._clientes:
+            print(f"    - {cliente.describir()}")
+
+    # ------------------------------------------------------------------
+    # GESTIÓN DE SERVICIOS
+    # ------------------------------------------------------------------
+
+    def agregar_servicio(self, servicio):
+
+        try:
+            if not isinstance(servicio, Servicio):
+                raise ServicioError("El objeto proporcionado no es un Servicio válido.")
+            self._servicios.append(servicio)
+            print(f"   Servicio agregado: {servicio.get_nombre()}")
+            return servicio
+        except ServicioError as e:
+            print(f"   {e}")
+            return None
+
+    def buscar_servicio(self, id):
+
+        for servicio in self._servicios:
+            if servicio.get_id() == id:
+                return servicio
+        return None
+
+    def listar_servicios(self):
+        if not self._servicios:
+            print("  No hay servicios registrados.")
+            return
+        print("  Servicios disponibles:")
+        for servicio in self._servicios:
+            print(f"    - {servicio.describir()}")
+
+    # ------------------------------------------------------------------
+    # GESTIÓN DE RESERVAS
+    # ------------------------------------------------------------------
+
+    def crear_reserva(self, cliente, servicio, duracion):
+
+        try:
+            reserva = Reserva(cliente, servicio, duracion)
+        except ReservaError as e:
+            print(f"   {e}")
+            return None
+        else:
+            self._reservas.append(reserva)
+            print(f"   Reserva creada: {reserva.describir()}")
+            return reserva
+
+    def buscar_reserva(self, id):
+
+        for reserva in self._reservas:
+            if reserva.get_id() == id:
+                return reserva
+        return None
+
+    def listar_reservas(self):
+        if not self._reservas:
+            print("  No hay reservas registradas.")
+            return
+        print("  Reservas registradas:")
+        for reserva in self._reservas:
+            print(f"    - {reserva.describir()}")
+
+    def listar_reservas_por_estado(self, estado):
+
+        filtradas = [r for r in self._reservas if r.get_estado() == estado]
+        if not filtradas:
+            print(f"  No hay reservas con estado '{estado}'.")
+            return
+        print(f"  Reservas con estado '{estado}':")
+        for reserva in filtradas:
+            print(f"    - {reserva.describir()}")
+
+            f"| Precio: ${self._precio_base}/h | Depósito: ${self.__deposito}"
+    def validar(self) -> bool:
+        return True
