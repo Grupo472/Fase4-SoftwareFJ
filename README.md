@@ -12,11 +12,11 @@
 
 | Nombre | GitHub | Ramas | Issues |
 |---|---|---|---|
-| Edisson Ferney Parrado Reyes | [@EdissonParrado](https://github.com/EdissonParrado) | `imports` `logs` `excepciones` `sistema` | #1 #2 #3 #9 |
-| Alexandra Tautiva Betancur | [@ALXBETANCUR](https://github.com/ALXBETANCUR) | `entidadbase` `servicio-sala` | #4 #6 |
-| Daniel Eduardo Caro Rodriguez | [@carorodriguezdanieleduardo-dot](https://github.com/carorodriguezdanieleduardo-dot)| `cliente` `equipo-asesoria` | #5 #7 |
-| por definir | @usuario | `reserva` | #8 |
-
+| Edisson Ferney Parrado Reyes | [@EdissonParrado](https://github.com/EdissonParrado) | `imports` `logs` `excepciones`   | #1 #2 #3 |
+| Alexandra Tautiva Betancur | [@ALXBETANCUR](https://github.com/ALXBETANCUR) | `clase-servicio` `servicio-sala` `entidadbase`| #4 #6 #7 #28 |
+| Daniel Eduardo Caro Rodriguez | [@carorodriguezdanieleduardo-dot](https://github.com/carorodriguezdanieleduardo-dot)| `tu-rama` `----`  | #5 #9|
+| Hugo Enrique Florez Granados | [@hugoflorez62](https://github.com/hugoflorez62) | `hugoflorez62-patch-1` `asesoria-especializada`| #8 #29 |
+| Jhonnatan Steven Gonzales Ramirez | [@Jturing589](https://github.com/Jturing589) | `----` | #30 |
 ---
 
 ## 📁 Estructura del proyecto
@@ -74,3 +74,25 @@ git push origin nombre-de-tu-rama
 | `docs` | Cambias comentarios o documentación |
 | `refactor` | Reorganizas código sin cambiar su funcionamiento |
 | `test` | Agregas pruebas o la simulación final |
+
+
+---
+
+## 🔧 Ajustes y Correcciones por parte del colaborador (Edisson Parrado)
+
+| Rama | Descripción | PR | Estado |
+|------|-------------|----|---------|
+| `feat/completar-reservasala-alquilerequipo` | Completar clases ReservaSala y AlquilerEquipo con uuid, logger y validaciones | [#40](https://github.com/Grupo472/Fase4-SoftwareFJ/pull/40) | ✅ Abierto |
+| `feat/completar-clase-reserva` | Completar clase Reserva con inicialización, describir() y validar()| [#38](https://github.com/Grupo472/Fase4-SoftwareFJ/pull/38) | ✅ Fusionado |
+| `fix/errores-criticos` | Corregir errores críticos en clases de servicios - excepciones y logger | [#37](https://github.com/Grupo472/Fase4-SoftwareFJ/pull/37) | ✅ Fusionado |
+| `fix/EntidadSistema` | Corrección y mejora EntidadSistema (sección ALXBETANCUR)| [#35](https://github.com/Grupo472/Fase4-SoftwareFJ/pull/35) | ✅ Fusionado |
+
+
+         
+- ### ✨ Cambios Principales Realizados
+  - - 1. **Corrección de Herencia** - EntidadSistema ahora funciona correctamente como clase base abstracta
+      2. **Métodos Abstractos** - Implementación obligatoria de `describir()` y `validar()` en todas las entidades
+      3. **Logging Robusto** - Integración consistente del logger en todas las excepciones y eventos críticos
+      4. **Validaciones Mejoradas** - Regex para emails, validaciones de rango para precios y descuentos
+      5. **UUID Automático** - Generación de identificadores únicos para ReservaSala y AlquilerEquipo
+      6. **Manejo de Excepciones** - Excepciones personalizadas con encadenamiento (`from e`)
