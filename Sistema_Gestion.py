@@ -270,7 +270,9 @@ class AlquilerEquipo(Servicio):
     def describir(self) -> str:
         return (f"Equipo '{self._nombre}' ({self.__tipo_equipo}) "
 
-                f"| Precio: ${self._precio_hora}/h | Depósito: ${self.__deposito}")
+                f"| Precio: ${self._precio_base}/h | Depósito: ${self.__deposito}")
+    def validar(self) -> bool:
+        return True
 # =============================
 # CLASE ASESORIA ESPECIALIZADA
 # =============================
@@ -370,8 +372,8 @@ class Reserva(EntidadSistema):
     def confirmar(self):
        
         # No se puede confirmar una reserva cancelada
-        if self._estado == "cancelada":
-            raise ReservaError("No se puede confirmar una reserva cancelada")
+        if self._estado in ["cancelada", "procesada", "confirmada"]:
+            raise ReservaError(f"No se puede confirmar una reserva en estado '{self._estado}'")
 
         # Se verifica disponibilidad del servicio
         if not self._servicio.esta_disponible():
