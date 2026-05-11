@@ -365,7 +365,8 @@ class Reserva(EntidadSistema):
 
         # Registro en logs
         logger.info("Reserva creada correctamente")
-
+    def get_estado(self): # Método getter para obtener el estado actual de la reserva
+        return self._estado # Retorna el estado actual de la reserva, que puede ser "pendiente", "confirmada", "procesada" o "cancelada". 
     # ==========================
     # CONFIRMAR RESERVA
     # ==========================
