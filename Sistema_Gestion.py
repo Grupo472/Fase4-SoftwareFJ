@@ -566,3 +566,5 @@ class SistemaGestion:
             f"| Precio: ${self._precio_base}/h | Depósito: ${self.__deposito}"
     def validar(self) -> bool:
         return True
+
+#=============================================================================
