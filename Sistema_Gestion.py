@@ -6,6 +6,7 @@
 # Alexandra Tautiva Betancur
 # Daniel Eduardo Caro Rodriguez
 # Hugo Enrique Florez Granados
+# Jhonnatan Steven Gonzales Ramirez
 #==============================================================================
 
 # Se importan las librerías necesarias para el funcionamiento del sistema, incluyendo

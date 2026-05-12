@@ -1,1 +1,23 @@
 
+2026-05-12 00:02:11,323 - INFO - [SISTEMA] Software FJ iniciado correctamente
+2026-05-12 00:02:11,323 - ERROR - [ERROR] ClienteError: Correo inválido
+2026-05-12 00:02:11,324 - INFO - [SISTEMA] Intento de registro de cliente finalizado
+2026-05-12 00:02:11,324 - INFO - [SISTEMA] Intento de registro de cliente finalizado
+2026-05-12 00:02:11,324 - ERROR - [ERROR] ClienteError: El nombre no puede estar vacío
+2026-05-12 00:02:11,325 - INFO - [SISTEMA] Intento de registro de cliente finalizado
+2026-05-12 00:02:11,325 - INFO - [SISTEMA] Intento de registro de cliente finalizado
+2026-05-12 00:02:11,326 - INFO - Servicio ReservaSala creado: Sala Innovación con capacidad 15 personas
+2026-05-12 00:02:11,327 - INFO - Servicio AsesoriaEspecializada creado: Asesoría Python - Especialidad: Dr. García - Máx Horas: 8
+2026-05-12 00:02:11,354 - INFO - Servicio AlquilerEquipo creado: Portátiles HP - Tipo: Laptop - Depósito: $50000
+2026-05-12 00:02:11,354 - INFO - Reserva creada correctamente
+2026-05-12 00:02:11,355 - INFO - Costo calculado: 528000.0
+2026-05-12 00:02:11,355 - INFO - Proceso de reserva finalizado
+2026-05-12 00:02:11,355 - INFO - Reserva creada correctamente
+2026-05-12 00:02:11,355 - INFO - Reserva creada correctamente
+2026-05-12 00:02:11,356 - INFO - Reserva confirmada
+2026-05-12 00:02:11,356 - INFO - Costo calculado: 150000.0
+2026-05-12 00:02:11,356 - INFO - Proceso de reserva finalizado
+2026-05-12 00:02:11,356 - ERROR - [ERROR] ReservaError: No se puede confirmar una reserva en estado 'procesada'
+2026-05-12 00:02:11,357 - INFO - Reserva creada correctamente
+2026-05-12 00:02:11,357 - INFO - Reserva cancelada
+2026-05-12 00:02:11,357 - ERROR - [ERROR] ReservaError: No se puede cancelar esta reserva
