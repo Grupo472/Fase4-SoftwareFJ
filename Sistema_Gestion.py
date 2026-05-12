@@ -646,16 +646,15 @@ def main(): # Función principal que simula el funcionamiento del sistema de ges
     # ------------------------------------------------------------------
     # OP 8 — Reserva VÁLIDA con IVA y descuento
     print("\n[OP 8] Reserva válida — sala 3h con IVA 19% y descuento 10%:")
-    r1 = None
-    if c1 and sala:
-        r1 = sistema.crear_reserva(c1, sala, 3)
-        if r1:
-            try:
-                costo = r1.confirmar(con_iva=True, descuento=10)
-                print(f"   Reserva confirmada — Costo final: ${costo:,.2f}")
-            except ReservaError as e:
-                print(f"   {e}")
-
+    r1 = sistema.crear_reserva(c1, sala, 3)
+    if r1:
+        try:
+            r1.confirmar()  # solo confirma — sin parámetros
+            costo = sala.calcular_costo(3, descuento=10, aplicar_iva=True)  # calcula aparte
+            print(f"  Costo con IVA 19% y descuento 10%: ${costo:,.2f}") 
+            r1.procesar()
+        except ReservaError as e:
+            print(f"   {e}")
     # ------------------------------------------------------------------
     # OP 9 — Operación NO PERMITIDA: confirmar una reserva ya confirmada
     print("\n[OP 9] Operación no permitida — confirmar reserva ya confirmada:")
