@@ -6,6 +6,7 @@
 # Alexandra Tautiva Betancur
 # Daniel Eduardo Caro Rodriguez
 # Hugo Enrique Florez Granados
+# Jhonnatan Steven Gonzales Ramirez
 #==============================================================================
 
 # Se importan las librerías necesarias para el funcionamiento del sistema, incluyendo
@@ -569,3 +570,121 @@ class SistemaGestion:
         return True
 
 #=============================================================================
+# SIMULACIÓN — 10 OPERACIONES DEL SISTEMA
+#==============================================================================
+
+def main(): # Función principal que simula el funcionamiento del sistema de gestión de clientes, servicios y reservas demostrando la creación de clientes, servicios, reservas y el manejo de errores a través de excepciones personalizadas.
+    print("=" * 65)
+    print("   SISTEMA DE GESTIÓN - SOFTWARE FJ")
+    print("   Fase 4 - Programación 213023 - UNAD - Grupo 472")
+    print("   Simulación de 10 operaciones")
+    print("=" * 65)
+
+    sistema = SistemaGestion() # Instancia del sistema de gestión, que se utilizará para registrar clientes, agregar servicios y crear reservas a lo largo de la simulación.
+    # ------------------------------------------------------------------
+    # OP 1 — Registro INVÁLIDO: email sin formato correcto
+    print("\n[OP 1] Registro inválido — email sin formato correcto:")
+    sistema.registrar_cliente("C001", "Pedro Gomez", "correomal", "3001234567")
+
+    # ------------------------------------------------------------------
+    # OP 2 — Registro VÁLIDO de primer cliente
+    print("\n[OP 2] Registro válido — primer cliente:")
+    c1 = sistema.registrar_cliente(
+        "C002", "Juan Perez", "juan@email.com", "3001234567"
+    )
+
+    # ------------------------------------------------------------------
+    # OP 3 — Registro INVÁLIDO: nombre vacío
+    print("\n[OP 3] Registro inválido — nombre vacío:")
+    sistema.registrar_cliente("C003", "", "test@email.com", "3009999999")
+
+    # ------------------------------------------------------------------
+    # OP 4 — Registro VÁLIDO de segundo cliente
+    print("\n[OP 4] Registro válido — segundo cliente:")
+    c2 = sistema.registrar_cliente(
+        "C004", "Carlos Ruiz", "carlos@email.com", "3007654321"
+    )
+
+    # ------------------------------------------------------------------
+    # OP 5 — Crear los tres servicios y demostrar polimorfismo en describir()
+    print("\n[OP 5] Crear servicios — polimorfismo en describir():") 
+    sala = asesoria = equipo = None # Inicializamos las variables para evitar referencias a variables no definidas en caso de error
+    try:
+        sala     = ReservaSala("Sala Innovación", 50_000, 15) # Servicio de reserva de sala con capacidad para 15 personas
+        asesoria = AsesoriaEspecializada("Asesoría Python", 80_000, "Dr. García") # Servicio de asesoría especializada en Python con un precio base de 80,000 por hora y una especialidad a cargo del Dr. García
+        equipo   = AlquilerEquipo("Portátiles HP", 15_000, "Laptop", 50_000) # Servicio de alquiler de equipos tecnológicos para portátiles HP con un precio base de 15,000 por hora y un depósito de garantía de 50,000
+
+        sistema.agregar_servicio(sala) # Agrega el servicio de reserva de sala al sistema, lo que permite que los clientes puedan reservar esta sala para sus reuniones o eventos.
+        sistema.agregar_servicio(asesoria) # Agrega el servicio de asesoría especializada al sistema, lo que permite que los clientes puedan solicitar asesorías profesionales en diferentes áreas de especialización.
+        sistema.agregar_servicio(equipo) # Agrega el servicio de alquiler de equipos tecnológicos al sistema, lo que permite que los clientes puedan alquilar diferentes tipos de equipos para sus necesidades tecnológicas.
+
+        print("\n  Polimorfismo — mismo método describir(), tres resultados distintos:")
+        for s in [sala, asesoria, equipo]:
+            print(f"  → {s.describir()}")
+
+    except ServicioError as e:
+        print(f" {e}")
+
+    # ------------------------------------------------------------------
+    # OP 6 — Reserva INVÁLIDA: asesoría supera límite de horas
+    print("\n[OP 6] Reserva inválida — asesoría supera límite de horas (máx 4h):") 
+    if c1 and asesoria: 
+        r_invalida = sistema.crear_reserva(c1, asesoria, 6)  # 6h > HORAS_MAX=4
+        if r_invalida:
+            try:
+                r_invalida.procesar()
+            except ReservaError as e:
+                print(f"   Reserva bloqueada: {e}")
+
+    # ------------------------------------------------------------------
+    # OP 7 — Reserva INVÁLIDA: servicio no disponible
+    print("\n[OP 7] Reserva inválida — servicio marcado como no disponible:")
+    if c1 and sala:
+        sala.set_disponible(False)
+        sistema.crear_reserva(c1, sala, 3)
+        sala.set_disponible(True)  # restaurar para las siguientes ops
+
+    # ------------------------------------------------------------------
+    # OP 8 — Reserva VÁLIDA con IVA y descuento
+    print("\n[OP 8] Reserva válida — sala 3h con IVA 19% y descuento 10%:")
+    r1 = sistema.crear_reserva(c1, sala, 3)
+    if r1:
+        try:
+            r1.confirmar()  # solo confirma — sin parámetros
+            costo = sala.calcular_costo(3, descuento=10, aplicar_iva=True)  # calcula aparte
+            print(f"  Costo con IVA 19% y descuento 10%: ${costo:,.2f}") 
+            r1.procesar()
+        except ReservaError as e:
+            print(f"   {e}")
+    # ------------------------------------------------------------------
+    # OP 9 — Operación NO PERMITIDA: confirmar una reserva ya confirmada
+    print("\n[OP 9] Operación no permitida — confirmar reserva ya confirmada:")
+    if r1:
+        try:
+            r1.confirmar()
+        except ReservaError as e:
+            print(f"  Operación bloqueada: {e}")
+
+    # ------------------------------------------------------------------
+    # OP 10 — Operación NO PERMITIDA: cancelar una reserva ya cancelada
+    print("\n[OP 10] Operación no permitida — cancelar reserva dos veces:")
+    r2 = None
+    if c2 and equipo:
+        r2 = sistema.crear_reserva(c2, equipo, 2)
+        if r2:
+            try:
+                r2.cancelar()
+                print("  Primera cancelación exitosa")
+                r2.cancelar()  # segundo intento — debe fallar controladamente
+            except ReservaError as e:
+                print(f"  Segunda cancelación bloqueada: {e}")
+
+# Simulación completa
+    print("\n" + "=" * 65)
+    print("   Simulación completada — sistema estable en todas las operaciones")
+    print("   Registro completo en: logs/sistema.log")
+    print("=" * 65)
+
+# Ejecutar la función principal para iniciar la simulación del sistema de gestión de clientes, servicios y reservas, demostrando las operaciones y el manejo de errores a través de excepciones personalizadas. 
+if __name__ == "__main__":
+    main()
